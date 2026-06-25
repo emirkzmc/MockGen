@@ -1,11 +1,11 @@
 "use client";
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { FloatingInput } from '@/src/components/ui/FloatingInput';
-import { Button } from '@/src/components/ui/Button';
-import { TrackingEye } from '@/src/components/shared/TrackingEye';
+import { FloatingInput } from '../../components/ui/FloatingInput';
+import { Button } from '../../components/ui/Button';
+import { TrackingEye } from '../../components/shared/TrackingEye';
 import { motion } from 'framer-motion';
-import { useLoginMutation } from '@/src/hooks/auth/login/useLoginMutation';
+import { useLoginMutation } from '../../hooks/auth/login/useLoginMutation';
 
 const LOGIN_FIELDS = [
   { id: 'email-login', label: 'E-posta', type: 'email', name: 'email' },

@@ -16,3 +16,15 @@ CREATE TABLE IF NOT EXISTS endpoints (
 );
 
 CREATE INDEX IF NOT EXISTS idx_endpoints_path_method ON endpoints(path, method);
+
+CREATE TABLE IF NOT EXISTS logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    method VARCHAR(10) NOT NULL,
+    path VARCHAR(255) NOT NULL,
+    headers JSONB,
+    body JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_logs_user_id ON logs(user_id);

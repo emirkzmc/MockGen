@@ -14,11 +14,26 @@ export class MockMiddleware implements NestMiddleware {
       return;
     }
 
-    const schema = await this.storage.findByPathAndMethod(req.path, req.method);
+    const endpointResult = await this.storage.findByPathAndMethod(req.path, req.method);
 
-    if (!schema) {
+    if (!endpointResult) {
       next();
       return;
+    }
+
+    const { schema, userId } = endpointResult;
+
+    // Log the request
+    try {
+      await this.storage.saveLog(
+        userId,
+        req.method,
+        req.path,
+        req.headers as Record<string, unknown>,
+        Object.keys(req.body || {}).length > 0 ? (req.body as Record<string, unknown>) : null
+      );
+    } catch (err) {
+      console.error('Failed to save log', err);
     }
 
     const generatedData = this.generateFromSchema(schema);

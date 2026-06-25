@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, NotFoundException } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Inject } from '@nestjs/common';
 import type { IStorage } from '../core/contracts/storage.interface';
@@ -18,11 +18,36 @@ export class MockController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('endpoints')
+  async getEndpoints(
+    @Request() req: ExpressRequest & { user?: Record<string, unknown> },
+  ): Promise<Record<string, unknown>[]> {
+    const user = req.user ?? {};
+    const userId = typeof user.userId === 'string' ? user.userId : '';
+    return this.storage.findAllEndpoints(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('endpoints/:id')
+  async getEndpoint(
+    @Param('id') id: string,
+    @Request() req: ExpressRequest & { user?: Record<string, unknown> },
+  ): Promise<Record<string, unknown>> {
+    const user = req.user ?? {};
+    const userId = typeof user.userId === 'string' ? user.userId : '';
+    const endpoint = await this.storage.findEndpointById(id, userId);
+    if (!endpoint) {
+      throw new NotFoundException('Endpoint not found');
+    }
+    return endpoint;
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('endpoints')
   async saveEndpoint(
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
     @Body() body: Record<string, unknown>,
-  ): Promise<void> {
+  ): Promise<Record<string, unknown>> {
     const user = req.user ?? {};
     const userId = typeof user.userId === 'string' ? user.userId : '';
     const path = typeof body.path === 'string' ? body.path : '';
@@ -32,7 +57,48 @@ export class MockController {
         ? (body.schema as Record<string, unknown>)
         : {};
 
-    await this.storage.save(userId, path, method, schema);
+    return this.storage.save(userId, path, method, schema);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('endpoints/:id')
+  async updateEndpoint(
+    @Param('id') id: string,
+    @Request() req: ExpressRequest & { user?: Record<string, unknown> },
+    @Body() body: Record<string, unknown>,
+  ): Promise<Record<string, unknown>> {
+    const user = req.user ?? {};
+    const userId = typeof user.userId === 'string' ? user.userId : '';
+    const path = typeof body.path === 'string' ? body.path : '';
+    const method = typeof body.method === 'string' ? body.method : '';
+    const schema =
+      typeof body.schema === 'object' && body.schema !== null
+        ? (body.schema as Record<string, unknown>)
+        : {};
+
+    return this.storage.updateEndpoint(id, userId, path, method, schema);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('endpoints/:id')
+  async deleteEndpoint(
+    @Param('id') id: string,
+    @Request() req: ExpressRequest & { user?: Record<string, unknown> },
+  ): Promise<{ success: boolean }> {
+    const user = req.user ?? {};
+    const userId = typeof user.userId === 'string' ? user.userId : '';
+    await this.storage.deleteEndpoint(id, userId);
+    return { success: true };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('logs')
+  async getLogs(
+    @Request() req: ExpressRequest & { user?: Record<string, unknown> },
+  ): Promise<Record<string, unknown>[]> {
+    const user = req.user ?? {};
+    const userId = typeof user.userId === 'string' ? user.userId : '';
+    return this.storage.getLogs(userId);
   }
 
   private generateFromSchema(
