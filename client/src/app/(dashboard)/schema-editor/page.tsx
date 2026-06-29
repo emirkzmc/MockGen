@@ -2,10 +2,14 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCreateEndpoint, useUpdateEndpoint, useGetEndpoint } from "@/lib/query/useEndpoints";
+import { useCreateEndpoint, useUpdateEndpoint, useGetEndpoint } from "@/hooks/endpoints/useEndpoints";
 import { Save, Plus, Trash2, ArrowLeft, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { PanelInput } from "@/components/ui/PanelInput";
+import { PanelSelect } from "@/components/ui/PanelSelect";
+import { PanelButton } from "@/components/ui/PanelButton";
+import { PanelIconButton } from "@/components/ui/PanelIconButton";
 
 interface SchemaField {
   id: string;
@@ -48,7 +52,7 @@ function SchemaEditorContent() {
   }, [existingEndpoint]);
 
   const addField = () => {
-    setFields([...fields, { id: Date.now().toString(), name: "newField", type: "string" }]);
+    setFields([...fields, { id: Date.now().toString(), name: "new_field", type: "string" }]);
   };
 
   const removeField = (id: string) => {
@@ -102,19 +106,19 @@ function SchemaEditorContent() {
         { id: editId, payload },
         {
           onSuccess: () => {
-            toast.success("Endpoint updated successfully");
+            toast.success("Endpoint updated");
             router.push("/endpoints");
           },
-          onError: () => toast.error("Failed to update endpoint")
+          onError: () => toast.error("Failed to update")
         }
       );
     } else {
       createMutation.mutate(payload, {
         onSuccess: () => {
-          toast.success("Endpoint created successfully");
+          toast.success("Endpoint created");
           router.push("/endpoints");
         },
-        onError: () => toast.error("Failed to create endpoint")
+        onError: () => toast.error("Failed to create")
       });
     }
   };
@@ -123,148 +127,155 @@ function SchemaEditorContent() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-black">
-        <RefreshCw className="w-10 h-10 animate-spin mb-4" />
-        <p className="font-medium">Loading editor...</p>
+      <div className="flex flex-col items-center justify-center h-full text-white/50">
+        <RefreshCw className="w-8 h-8 animate-spin mb-4" />
+        <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-4">
-          <Link href="/endpoints" className="p-2.5 text-black hover:bg-black/10 rounded-xl transition-all duration-300 cursor-pointer shadow-sm border border-transparent hover:border-black/10">
+    <div className="space-y-12 max-w-6xl">
+      <div className="flex justify-between items-end border-b border-white/10 pb-8">
+        <div className="flex items-center space-x-6">
+          <Link href="/endpoints" className="text-white/40 hover:text-white transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <h1 className="text-3xl font-bold text-black drop-shadow-sm">{editId ? "Edit Endpoint" : "Create New Endpoint"}</h1>
+          <div>
+            <h1 className="text-3xl font-light text-white tracking-wide">{editId ? "Edit Endpoint" : "New Endpoint"}</h1>
+            <p className="text-sm text-white/40 mt-2 font-light">Define your API structure and mock data rules.</p>
+          </div>
         </div>
-        <button
+        <PanelButton
           onClick={handleSave}
           disabled={isSaving}
-          className="inline-flex items-center justify-center space-x-2 px-5 py-2.5 bg-[#BABABA]/55 border border-[#a4a4a4] text-black font-semibold rounded-xl hover:scale-105 hover:bg-[#BABABA]/70 transition-all duration-300 shadow-sm disabled:opacity-50 cursor-pointer"
+          icon={isSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
         >
-          {isSaving ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-          <span>{isSaving ? "Saving..." : "Save Endpoint"}</span>
-        </button>
+          {isSaving ? "Saving..." : "Save Endpoint"}
+        </PanelButton>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-140px)] min-h-[600px]">
-        <div className="bg-white/40 backdrop-blur-xl rounded-2xl shadow-lg shadow-black/5 border border-white/50 p-6 flex flex-col h-full overflow-y-auto">
-          <h2 className="text-xl font-bold text-black mb-6 border-b border-black/10 pb-4">Configuration</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        <div className="lg:col-span-7 flex flex-col space-y-12">
           
-          <div className="space-y-6 flex-1">
-            <div className="grid grid-cols-3 gap-5">
+          {/* Config Section */}
+          <div className="space-y-8">
+            <h2 className="text-xs text-white/30 uppercase tracking-widest border-b border-white/5 pb-4">Configuration</h2>
+            <div className="grid grid-cols-3 gap-8">
               <div className="col-span-1">
-                <label className="block text-sm font-semibold text-[#404040] mb-2 uppercase tracking-wide">Method</label>
-                <select
+                <label className="block text-xs text-white/40 uppercase tracking-widest mb-3">Method</label>
+                <PanelSelect
                   value={method}
                   onChange={(e) => setMethod(e.target.value)}
-                  className="w-full px-4 py-2.5 border border-[#a4a4a4] bg-white/50 backdrop-blur-sm rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-black font-medium transition-all"
-                >
-                  <option value="GET">GET</option>
-                  <option value="POST">POST</option>
-                  <option value="PUT">PUT</option>
-                  <option value="PATCH">PATCH</option>
-                  <option value="DELETE">DELETE</option>
-                </select>
+                  options={[
+                    { label: "GET", value: "GET" },
+                    { label: "POST", value: "POST" },
+                    { label: "PUT", value: "PUT" },
+                    { label: "PATCH", value: "PATCH" },
+                    { label: "DELETE", value: "DELETE" },
+                  ]}
+                />
               </div>
               <div className="col-span-2">
-                <label className="block text-sm font-semibold text-[#404040] mb-2 uppercase tracking-wide">Endpoint Path</label>
-                <input
+                <label className="block text-xs text-white/40 uppercase tracking-widest mb-3">Endpoint Path</label>
+                <PanelInput
                   type="text"
                   value={path}
                   onChange={(e) => setPath(e.target.value)}
                   placeholder="/api/users"
-                  className="w-full px-4 py-2.5 border border-[#a4a4a4] bg-white/50 backdrop-blur-sm rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-black focus:border-black font-mono text-black placeholder:text-[#999999] transition-all"
+                  className="font-mono"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#404040] mb-2 uppercase tracking-wide">Mock Count (Array length)</label>
-              <input
+              <label className="block text-xs text-white/40 uppercase tracking-widest mb-3">Mock Count</label>
+              <PanelInput
                 type="number"
                 min="1"
                 max="100"
                 value={count}
                 onChange={(e) => setCount(parseInt(e.target.value) || 1)}
-                className="w-full px-4 py-2.5 border border-[#a4a4a4] bg-white/50 backdrop-blur-sm rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-black transition-all"
               />
             </div>
+          </div>
 
-            <div className="pt-6 border-t border-black/10">
-              <div className="flex justify-between items-center mb-5">
-                <h3 className="text-lg font-bold text-black">Response Schema</h3>
-                <button
-                  onClick={addField}
-                  className="inline-flex items-center space-x-1.5 text-sm text-black hover:text-[#404040] font-bold cursor-pointer transition-colors bg-white/50 px-3 py-1.5 rounded-lg border border-[#a4a4a4]/50 shadow-sm"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Add Field</span>
-                </button>
-              </div>
-              
-              <div className="space-y-3">
-                {fields.map((field) => (
-                  <div key={field.id} className="flex items-start space-x-3 bg-black/5 p-3 rounded-xl border border-black/10 shadow-inner">
-                    <div className="flex-1">
-                      <input
-                        type="text"
-                        value={field.name}
-                        onChange={(e) => updateField(field.id, "name", e.target.value)}
-                        placeholder="field_name"
-                        className="w-full px-3 py-2 border border-[#a4a4a4]/60 bg-white/60 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black font-mono text-sm text-black placeholder:text-[#999999]"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <select
-                        value={field.type}
-                        onChange={(e) => updateField(field.id, "type", e.target.value as SchemaField["type"])}
-                        className="w-full px-3 py-2 border border-[#a4a4a4]/60 bg-white/60 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black text-sm text-black font-medium"
-                      >
-                        <option value="string">String</option>
-                        <option value="number">Number</option>
-                        <option value="boolean">Boolean</option>
-                        <option value="uuid">UUID</option>
-                        <option value="date">Date</option>
-                        <option value="object">Object</option>
-                        <option value="array">Array</option>
-                      </select>
-                    </div>
-                    <button
-                      onClick={() => removeField(field.id)}
-                      className="p-2 text-[#404040] hover:text-white hover:bg-black rounded-lg transition-all duration-200 cursor-pointer shadow-sm"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+          {/* Schema Section */}
+          <div className="space-y-8">
+            <div className="flex justify-between items-center border-b border-white/5 pb-4">
+              <h2 className="text-xs text-white/30 uppercase tracking-widest">Response Schema</h2>
+              <button
+                onClick={addField}
+                className="text-xs text-white/60 hover:text-white uppercase tracking-widest flex items-center space-x-1 transition-colors"
+              >
+                <Plus className="w-3 h-3" />
+                <span>Add Field</span>
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {fields.map((field) => (
+                <div key={field.id} className="flex items-end space-x-6 group">
+                  <div className="flex-1">
+                    <label className="block text-[10px] text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Field Name</label>
+                    <PanelInput
+                      type="text"
+                      value={field.name}
+                      onChange={(e) => updateField(field.id, "name", e.target.value)}
+                      placeholder="field_name"
+                      className="px-2 py-2 text-sm font-mono border-white/10"
+                    />
                   </div>
-                ))}
-              </div>
+                  <div className="flex-1">
+                    <label className="block text-[10px] text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Type</label>
+                    <PanelSelect
+                      value={field.type}
+                      onChange={(e) => updateField(field.id, "type", e.target.value as SchemaField["type"])}
+                      options={[
+                        { label: "String", value: "string" },
+                        { label: "Number", value: "number" },
+                        { label: "Boolean", value: "boolean" },
+                        { label: "UUID", value: "uuid" },
+                        { label: "Date", value: "date" },
+                        { label: "Object", value: "object" },
+                        { label: "Array", value: "array" },
+                      ]}
+                      className="px-2 py-2 text-sm border-white/10"
+                    />
+                  </div>
+                  <PanelIconButton
+                    icon={<Trash2 className="w-4 h-4" />}
+                    onClick={() => removeField(field.id)}
+                    variant="danger"
+                    className="pb-3"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="bg-[#1a1a1a] rounded-2xl shadow-inner border border-[#404040]/50 p-6 flex flex-col h-full overflow-hidden relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent pointer-events-none"></div>
-          <div className="flex justify-between items-center mb-4 relative z-10">
-            <h2 className="text-lg font-bold text-[#d4d4d4] flex items-center space-x-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#a4a4a4] animate-pulse shadow-[0_0_8px_rgba(164,164,164,0.6)]"></span>
-              <span>Live Preview</span>
-            </h2>
-            <div className="text-xs text-[#a4a4a4] font-mono bg-[#2a2a2a] px-2 py-1 rounded-md border border-[#404040]">
-              {method} {path}
+        {/* Live Preview Section */}
+        <div className="lg:col-span-5">
+          <div className="sticky top-12 space-y-6">
+            <div className="flex justify-between items-center border-b border-white/5 pb-4">
+              <h2 className="text-xs text-white/30 uppercase tracking-widest flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#810100] animate-pulse"></span>
+                <span>Live Preview</span>
+              </h2>
+              <span className="text-xs text-white/40 font-mono tracking-wider">{method} {path}</span>
             </div>
-          </div>
-          <div className="flex-1 overflow-auto bg-[#111111] rounded-xl p-5 border border-[#2a2a2a] font-mono text-sm text-[#cccccc] relative z-10 shadow-inner">
-            <pre className="whitespace-pre-wrap break-all">
-              {JSON.stringify(generatePreview(), null, 2)}
-            </pre>
-            {count > 3 && (
-              <div className="mt-4 text-[#777777] italic border-t border-[#333] pt-3">
-                ... ({count - 3} more items not shown in preview)
-              </div>
-            )}
+            
+            <div className="bg-white/2 border border-white/5 rounded-xl p-6 font-mono text-sm text-white/70 min-h-100 overflow-auto">
+              <pre className="whitespace-pre-wrap break-all opacity-80">
+                {JSON.stringify(generatePreview(), null, 2)}
+              </pre>
+              {count > 3 && (
+                <div className="mt-6 text-white/30 italic text-xs">
+                  ... ({count - 3} more items not shown)
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -275,9 +286,9 @@ function SchemaEditorContent() {
 export default function SchemaEditorPage() {
   return (
     <Suspense fallback={
-      <div className="flex flex-col items-center justify-center h-full text-black p-24">
-        <RefreshCw className="w-10 h-10 animate-spin mb-4" />
-        <p className="font-medium">Loading Editor...</p>
+      <div className="flex flex-col items-center justify-center h-full text-white/50 py-20">
+        <RefreshCw className="w-8 h-8 animate-spin mb-4" />
+        <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
     }>
       <SchemaEditorContent />

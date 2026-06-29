@@ -1,5 +1,5 @@
 import { apiClient } from './client';
-import { AuthApiMethod } from '../constant/MethodNames/AuthApiMethod';
+import { AuthApiMethod } from '../constant/MethodNames';
 import type { LoginRequest, AuthResponse, RegisterRequest, RegisterResponse } from '../domain/authDomains';
 
 export async function loginUser(payload: LoginRequest): Promise<AuthResponse> {

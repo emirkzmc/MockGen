@@ -4,5 +4,5 @@ export const endpointKeys = {
   list: (filters: string) => [...endpointKeys.lists(), { filters }] as const,
   details: () => [...endpointKeys.all, 'detail'] as const,
   detail: (id: string) => [...endpointKeys.details(), id] as const,
-  logs: () => ['logs'] as const,
+  logs: () => [...endpointKeys.all, 'logs'] as const,
 };

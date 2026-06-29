@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { mockApi, CreateEndpointPayload } from '@/api';
-import { endpointKeys } from './endpointKeys';
+import { endpointKeys } from '../../lib/query/keys/endpointKeys';
 
 export function useGetEndpoints() {
   return useQuery({

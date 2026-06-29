@@ -1,8 +1,9 @@
 "use client";
 
-import { useGetEndpoints, useDeleteEndpoint } from "@/lib/query/useEndpoints";
-import Link from "next/link";
+import { useGetEndpoints, useDeleteEndpoint } from "@/hooks/endpoints/useEndpoints";
 import { Plus, Copy, Edit, Trash2, Loader2, AlertCircle, Network } from "lucide-react";
+import { PanelButton } from "@/components/ui/PanelButton";
+import { PanelIconButton } from "@/components/ui/PanelIconButton";
 import toast from "react-hot-toast";
 
 export default function EndpointsPage() {
@@ -25,92 +26,80 @@ export default function EndpointsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-black drop-shadow-sm">Endpoints</h1>
-        <Link
-          href="/schema-editor"
-          className="inline-flex items-center justify-center space-x-2 px-5 py-2.5 bg-[#BABABA]/55 border border-[#a4a4a4] text-black font-semibold rounded-xl hover:scale-105 hover:bg-[#BABABA]/70 transition-all duration-300 shadow-sm"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Create New</span>
-        </Link>
+    <div className="space-y-16 max-w-5xl">
+      <div className="flex justify-between items-end border-b border-white/10 pb-8">
+        <div>
+          <h1 className="text-3xl font-light text-white tracking-wide">Endpoints</h1>
+          <p className="text-sm text-white/40 mt-2 font-light">Manage and create new API endpoints.</p>
+        </div>
+        <PanelButton href="/schema-editor" icon={<Plus className="w-4 h-4" />}>
+          Create New
+        </PanelButton>
       </div>
 
-      <div className="bg-white/40 backdrop-blur-xl rounded-2xl shadow-lg shadow-black/5 border border-white/50 overflow-hidden">
+      <div className="pt-4">
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center p-16 text-black">
-            <Loader2 className="w-10 h-10 animate-spin mb-4" />
-            <p className="font-medium">Loading endpoints...</p>
+          <div className="flex flex-col items-center justify-center py-20 text-white/50">
+            <Loader2 className="w-8 h-8 animate-spin mb-4" />
+            <p className="font-light tracking-wide">Loading endpoints...</p>
           </div>
         ) : error ? (
-          <div className="flex flex-col items-center justify-center p-16 text-[#404040]">
-            <AlertCircle className="w-10 h-10 mb-4" />
-            <p className="font-medium">Failed to load endpoints. Please try again.</p>
+          <div className="flex flex-col items-center justify-center py-20 text-red-400/80">
+            <AlertCircle className="w-8 h-8 mb-4" />
+            <p className="font-light tracking-wide">Failed to load endpoints. Please try again.</p>
           </div>
         ) : !endpoints || endpoints.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-20 text-center">
-            <div className="w-20 h-20 bg-black/10 rounded-full flex items-center justify-center mb-6 shadow-inner border border-white/30">
-              <Network className="w-10 h-10 text-black" />
-            </div>
-            <h3 className="text-xl font-bold text-black mb-2">No endpoints found</h3>
-            <p className="text-[#404040] mb-8 font-medium">Get started by creating your first mock endpoint.</p>
-            <Link
-              href="/schema-editor"
-              className="inline-flex items-center justify-center space-x-2 px-5 py-2.5 bg-black text-white font-semibold rounded-xl hover:scale-105 hover:bg-black/80 transition-all duration-300 shadow-lg shadow-black/20"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Create Endpoint</span>
-            </Link>
+          <div className="flex flex-col items-center justify-center py-32 text-center border border-white/5 rounded-2xl bg-white/[0.02]">
+            <Network className="w-12 h-12 text-white/20 mb-6" />
+            <h3 className="text-xl font-light text-white mb-2 tracking-wide">No endpoints found</h3>
+            <p className="text-white/40 mb-8 font-light">Get started by creating your first mock endpoint.</p>
+            <PanelButton href="/schema-editor" icon={<Plus className="w-4 h-4" />}>
+              Create Endpoint
+            </PanelButton>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-[#404040]">
-              <thead className="bg-black/5 text-xs uppercase font-bold text-black border-b border-white/30">
+            <table className="w-full text-left text-sm text-white/70">
+              <thead className="text-xs text-white/30 uppercase tracking-widest border-b border-white/5">
                 <tr>
-                  <th className="px-6 py-5">Method</th>
-                  <th className="px-6 py-5">Path</th>
-                  <th className="px-6 py-5">Mock Count</th>
-                  <th className="px-6 py-5 text-right">Actions</th>
+                  <th className="pb-4 font-normal">Method</th>
+                  <th className="pb-4 font-normal">Path</th>
+                  <th className="pb-4 font-normal">Mock Count</th>
+                  <th className="pb-4 font-normal text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/30">
+              <tbody className="divide-y divide-white/5">
                 {endpoints.map((ep) => (
-                  <tr key={ep.id} className="hover:bg-white/30 transition-colors">
-                    <td className="px-6 py-5">
-                      <span className="bg-black/10 text-black px-2.5 py-1 rounded border border-black/10 text-xs font-bold">
+                  <tr key={ep.id} className="hover:bg-white/[0.02] transition-colors">
+                    <td className="py-5">
+                      <span className={`font-medium tracking-wide ${ep.method === 'GET' ? 'text-[#810100]' : ep.method === 'POST' ? 'text-white/80' : 'text-white/60'}`}>
                         {ep.method}
                       </span>
                     </td>
-                    <td className="px-6 py-5 font-mono font-medium text-black">{ep.path}</td>
-                    <td className="px-6 py-5">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/50 text-black border border-white/40 shadow-sm">
+                    <td className="py-5 font-mono text-white/90">{ep.path}</td>
+                    <td className="py-5">
+                      <span className="text-white/40 font-light">
                         {ep.count} items
                       </span>
                     </td>
-                    <td className="px-6 py-5 flex justify-end space-x-3">
-                      <button
-                        onClick={() => handleCopy(ep.path)}
-                        className="p-2 text-[#404040] hover:text-black hover:bg-black/10 rounded-lg transition-all duration-200 cursor-pointer"
-                        title="Copy URL"
-                      >
-                        <Copy className="w-4 h-4" />
-                      </button>
-                      <Link
-                        href={`/schema-editor?id=${ep.id}`}
-                        className="p-2 text-[#404040] hover:text-black hover:bg-black/10 rounded-lg transition-all duration-200 inline-block cursor-pointer"
-                        title="Edit"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(ep.id)}
-                        disabled={deleteMutation.isPending}
-                        className="p-2 text-[#404040] hover:text-black hover:bg-black/10 rounded-lg transition-all duration-200 disabled:opacity-50 cursor-pointer"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                    <td className="py-5 flex justify-end space-x-4">
+                      <PanelIconButton 
+                        icon={<Copy className="w-4 h-4" />} 
+                        onClick={() => handleCopy(ep.path)} 
+                        title="Copy URL" 
+                      />
+                      <PanelIconButton 
+                        icon={<Edit className="w-4 h-4" />} 
+                        href={`/schema-editor?id=${ep.id}`} 
+                        title="Edit" 
+                      />
+                      <PanelIconButton 
+                        icon={<Trash2 className="w-4 h-4" />} 
+                        onClick={() => handleDelete(ep.id)} 
+                        disabled={deleteMutation.isPending} 
+                        variant="danger" 
+                        title="Delete" 
+                      />
                     </td>
                   </tr>
                 ))}
