@@ -5,6 +5,8 @@
   --color-foreground: #111827;
 }
 
+@custom-variant dark (&:is(.dark *));
+
 @layer base {
   body {
     background-color: var(--color-background);

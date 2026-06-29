@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const FONTS = [
   'var(--font-poppins)', 
@@ -10,26 +11,36 @@ const FONTS = [
   'system-ui',
   '"Impact", fantasy',
   '"Georgia", serif',
-  '"Courier New", monospace',
-  '"Trebuchet MS", sans-serif',
-  '"Arial Black", sans-serif',
-  '"Comic Sans MS", cursive'
 ];
 
 export function AnimatedLabel() {
   const [fontIndex, setFontIndex] = useState(0);
+  const [phase, setPhase] = useState<'flicker' | 'final'>('flicker');
 
   const indexRef = useRef(0);
-  const lastUpdateRef = useRef(0);
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const loop = (time: number) => {
-      if (time - lastUpdateRef.current > 250) {
-        indexRef.current = (indexRef.current + 1) % FONTS.length;
-        lastUpdateRef.current = time;
+    if (phase !== 'flicker') return;
 
-        setFontIndex(indexRef.current);
+    const startTime = performance.now();
+    const duration = 2000;
+    const totalChanges = 2 * FONTS.length;
+
+    const loop = (time: number) => {
+      const elapsed = time - startTime;
+      
+      if (elapsed >= duration) {
+        setPhase('final');
+        return;
+      }
+
+      const progress = elapsed / duration;
+      const currentChange = Math.floor(progress * totalChanges);
+      
+      if (currentChange !== indexRef.current) {
+        indexRef.current = currentChange;
+        setFontIndex(currentChange % FONTS.length);
       }
 
       rafRef.current = requestAnimationFrame(loop);
@@ -40,14 +51,43 @@ export function AnimatedLabel() {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [phase]);
 
   return (
-    <div
-      className="text-[96px] font-bold leading-none will-change-transform"
-      style={{ fontFamily: FONTS[fontIndex] }}
-    >
-      MOCKGEN
+    <div className="relative flex items-center">
+      <AnimatePresence>
+        {phase === 'flicker' && (
+          <motion.div
+            key="flicker"
+            className="text-[96px] font-bold leading-none will-change-transform absolute right-0 whitespace-nowrap"
+            style={{ fontFamily: FONTS[fontIndex] }}
+            exit={{ opacity: 0, filter: "blur(10px)" }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+          >
+            MOCKGEN
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {phase === 'final' && (
+          <motion.div
+            key="final"
+            className="text-[96px] font-bold leading-none will-change-transform absolute right-0 origin-right whitespace-nowrap"
+            style={{ fontFamily: 'var(--font-poppins)' }}
+            initial={{ opacity: 0, filter: "blur(10px)", scale: 0.95 }}
+            animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.3 }}
+          >
+            MOCKGEN
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <div 
+        className="text-[96px] font-bold leading-none opacity-0 pointer-events-none whitespace-nowrap"
+        style={{ fontFamily: 'var(--font-poppins)' }}
+      >
+        MOCKGEN
+      </div>
     </div>
   );
 }

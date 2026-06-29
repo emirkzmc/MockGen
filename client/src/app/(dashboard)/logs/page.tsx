@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetLogs } from "@/hooks/endpoints/useEndpoints";
+import { useGetLogs } from "@/hooks/endpoints/useEndpoint";
 import { Loader2, AlertCircle, ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
@@ -10,7 +10,7 @@ export default function LogsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-white/50">
+      <div className="flex flex-col items-center justify-center py-20 text-black/50 dark:text-white/50">
         <Loader2 className="w-8 h-8 animate-spin mb-4" />
         <p className="font-light tracking-wide">Loading logs...</p>
       </div>
@@ -32,50 +32,50 @@ export default function LogsPage() {
 
   return (
     <div className="space-y-16 max-w-5xl">
-      <div className="border-b border-white/10 pb-8">
-        <h1 className="text-3xl font-light text-white tracking-wide">Logs & Analytics</h1>
-        <p className="text-sm text-white/40 mt-2 font-light">View detailed incoming request payloads.</p>
+      <div className="border-b border-black/10 dark:border-white/10 pb-8">
+        <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">Logs & Analytics</h1>
+        <p className="text-sm text-black/60 dark:text-white/40 mt-2 font-light">View detailed incoming request payloads.</p>
       </div>
 
       <div className="pt-4">
         {(!logs || logs.length === 0) ? (
           <div className="flex flex-col items-center justify-center py-32 text-center">
-            <h3 className="text-xl font-light text-white/50 mb-2 tracking-wide">No logs yet</h3>
-            <p className="text-white/30 font-light">Make requests to your mock endpoints to see them here.</p>
+            <h3 className="text-xl font-light text-black/50 dark:text-white/50 mb-2 tracking-wide">No logs yet</h3>
+            <p className="text-black/40 dark:text-white/30 font-light">Make requests to your mock endpoints to see them here.</p>
           </div>
         ) : (
-          <div className="divide-y divide-white/5">
+          <div className="divide-y divide-black/10 dark:divide-white/5">
             {logs.map((log) => (
               <div key={String(log.id)} className="flex flex-col">
                 <div 
-                  className="py-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors cursor-pointer"
+                  className="py-5 flex items-center justify-between hover:bg-black/5 dark:hover:bg-white/2 transition-colors cursor-pointer"
                   onClick={() => toggleExpand(String(log.id))}
                 >
                   <div className="flex items-center space-x-6">
-                    <span className="text-white/40">
+                    <span className="text-black/40 dark:text-white/40">
                       {expandedLog === String(log.id) ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                     </span>
-                    <span className={`font-medium tracking-wide w-12 ${String(log.method) === 'GET' ? 'text-[#810100]' : 'text-white/80'}`}>
+                    <span className={`font-medium tracking-wide w-12 ${String(log.method) === 'GET' ? 'text-[#810100]' : 'text-black/80 dark:text-white/80'}`}>
                       {String(log.method)}
                     </span>
-                    <span className="font-mono text-white/90">{String(log.path)}</span>
+                    <span className="font-mono text-black/90 dark:text-white/90">{String(log.path)}</span>
                   </div>
-                  <div className="text-sm text-white/30 font-light">
+                  <div className="text-sm text-black/40 dark:text-white/30 font-light">
                     {String(log.timestamp)}
                   </div>
                 </div>
                 {expandedLog === String(log.id) && (
-                  <div className="pl-16 py-6 border-t border-white/[0.02]">
+                  <div className="pl-16 py-6 border-t border-black/10 dark:border-white/2">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                       <div>
-                        <h4 className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-4">Request Headers</h4>
-                        <pre className="bg-white/[0.02] p-4 rounded border border-white/5 text-xs font-mono text-white/60 overflow-auto max-h-48">
+                        <h4 className="text-[10px] font-bold text-black/40 dark:text-white/30 uppercase tracking-widest mb-4">Request Headers</h4>
+                        <pre className="bg-black/5 dark:bg-white/2 p-4 rounded border border-black/10 dark:border-white/5 text-xs font-mono text-black/60 dark:text-white/60 overflow-auto max-h-48">
                           {JSON.stringify(log.headers, null, 2)}
                         </pre>
                       </div>
                       <div>
-                        <h4 className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-4">Request Body</h4>
-                        <pre className="bg-white/[0.02] p-4 rounded border border-white/5 text-xs font-mono text-white/60 overflow-auto max-h-48">
+                        <h4 className="text-[10px] font-bold text-black/40 dark:text-white/30 uppercase tracking-widest mb-4">Request Body</h4>
+                        <pre className="bg-black/5 dark:bg-white/2 p-4 rounded border border-black/10 dark:border-white/5 text-xs font-mono text-black/60 dark:text-white/60 overflow-auto max-h-48">
                           {JSON.stringify(log.body || {}, null, 2)}
                         </pre>
                       </div>

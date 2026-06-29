@@ -2,7 +2,8 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCreateEndpoint, useUpdateEndpoint, useGetEndpoint } from "@/hooks/endpoints/useEndpoints";
+import { useGetEndpoint } from "@/hooks/endpoints/useEndpoint";
+import { useCreateEndpointMutation, useUpdateEndpointMutation } from "@/hooks/endpoints/useEndpointMutations";
 import { Save, Plus, Trash2, ArrowLeft, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -31,8 +32,8 @@ function SchemaEditorContent() {
   ]);
 
   const { data: existingEndpoint, isLoading } = useGetEndpoint(editId);
-  const createMutation = useCreateEndpoint();
-  const updateMutation = useUpdateEndpoint();
+  const createMutation = useCreateEndpointMutation();
+  const updateMutation = useUpdateEndpointMutation();
 
   useEffect(() => {
     if (existingEndpoint) {
@@ -127,7 +128,7 @@ function SchemaEditorContent() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-white/50">
+      <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50">
         <RefreshCw className="w-8 h-8 animate-spin mb-4" />
         <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
@@ -136,14 +137,14 @@ function SchemaEditorContent() {
 
   return (
     <div className="space-y-12 max-w-6xl">
-      <div className="flex justify-between items-end border-b border-white/10 pb-8">
+      <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-8">
         <div className="flex items-center space-x-6">
-          <Link href="/endpoints" className="text-white/40 hover:text-white transition-colors">
+          <Link href="/endpoints" className="text-black/60 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-3xl font-light text-white tracking-wide">{editId ? "Edit Endpoint" : "New Endpoint"}</h1>
-            <p className="text-sm text-white/40 mt-2 font-light">Define your API structure and mock data rules.</p>
+            <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">{editId ? "Edit Endpoint" : "New Endpoint"}</h1>
+            <p className="text-sm text-black/60 dark:text-white/40 mt-2 font-light">Define your API structure and mock data rules.</p>
           </div>
         </div>
         <PanelButton
@@ -160,10 +161,10 @@ function SchemaEditorContent() {
           
           {/* Config Section */}
           <div className="space-y-8">
-            <h2 className="text-xs text-white/30 uppercase tracking-widest border-b border-white/5 pb-4">Configuration</h2>
+            <h2 className="text-xs text-black/40 dark:text-white/30 uppercase tracking-widest border-b border-black/10 dark:border-white/5 pb-4">Configuration</h2>
             <div className="grid grid-cols-3 gap-8">
               <div className="col-span-1">
-                <label className="block text-xs text-white/40 uppercase tracking-widest mb-3">Method</label>
+                <label className="block text-xs text-black/50 dark:text-white/40 uppercase tracking-widest mb-3">Method</label>
                 <PanelSelect
                   value={method}
                   onChange={(e) => setMethod(e.target.value)}
@@ -177,7 +178,7 @@ function SchemaEditorContent() {
                 />
               </div>
               <div className="col-span-2">
-                <label className="block text-xs text-white/40 uppercase tracking-widest mb-3">Endpoint Path</label>
+                <label className="block text-xs text-black/50 dark:text-white/40 uppercase tracking-widest mb-3">Endpoint Path</label>
                 <PanelInput
                   type="text"
                   value={path}
@@ -189,7 +190,7 @@ function SchemaEditorContent() {
             </div>
 
             <div>
-              <label className="block text-xs text-white/40 uppercase tracking-widest mb-3">Mock Count</label>
+              <label className="block text-xs text-black/50 dark:text-white/40 uppercase tracking-widest mb-3">Mock Count</label>
               <PanelInput
                 type="number"
                 min="1"
@@ -202,11 +203,11 @@ function SchemaEditorContent() {
 
           {/* Schema Section */}
           <div className="space-y-8">
-            <div className="flex justify-between items-center border-b border-white/5 pb-4">
-              <h2 className="text-xs text-white/30 uppercase tracking-widest">Response Schema</h2>
+            <div className="flex justify-between items-center border-b border-black/10 dark:border-white/5 pb-4">
+              <h2 className="text-xs text-black/40 dark:text-white/30 uppercase tracking-widest">Response Schema</h2>
               <button
                 onClick={addField}
-                className="text-xs text-white/60 hover:text-white uppercase tracking-widest flex items-center space-x-1 transition-colors"
+                className="text-xs text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white uppercase tracking-widest flex items-center space-x-1 transition-colors"
               >
                 <Plus className="w-3 h-3" />
                 <span>Add Field</span>
@@ -217,17 +218,17 @@ function SchemaEditorContent() {
               {fields.map((field) => (
                 <div key={field.id} className="flex items-end space-x-6 group">
                   <div className="flex-1">
-                    <label className="block text-[10px] text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Field Name</label>
+                    <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Field Name</label>
                     <PanelInput
                       type="text"
                       value={field.name}
                       onChange={(e) => updateField(field.id, "name", e.target.value)}
                       placeholder="field_name"
-                      className="px-2 py-2 text-sm font-mono border-white/10"
+                      className="px-2 py-2 text-sm font-mono border-black/20 dark:border-white/10"
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-[10px] text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Type</label>
+                    <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Type</label>
                     <PanelSelect
                       value={field.type}
                       onChange={(e) => updateField(field.id, "type", e.target.value as SchemaField["type"])}
@@ -240,7 +241,7 @@ function SchemaEditorContent() {
                         { label: "Object", value: "object" },
                         { label: "Array", value: "array" },
                       ]}
-                      className="px-2 py-2 text-sm border-white/10"
+                      className="px-2 py-2 text-sm border-black/20 dark:border-white/10"
                     />
                   </div>
                   <PanelIconButton
@@ -248,6 +249,7 @@ function SchemaEditorContent() {
                     onClick={() => removeField(field.id)}
                     variant="danger"
                     className="pb-3"
+                    title="Delete"
                   />
                 </div>
               ))}
@@ -258,20 +260,20 @@ function SchemaEditorContent() {
         {/* Live Preview Section */}
         <div className="lg:col-span-5">
           <div className="sticky top-12 space-y-6">
-            <div className="flex justify-between items-center border-b border-white/5 pb-4">
-              <h2 className="text-xs text-white/30 uppercase tracking-widest flex items-center space-x-2">
+            <div className="flex justify-between items-center border-b border-black/10 dark:border-white/5 pb-4">
+              <h2 className="text-xs text-black/40 dark:text-white/30 uppercase tracking-widest flex items-center space-x-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#810100] animate-pulse"></span>
                 <span>Live Preview</span>
               </h2>
-              <span className="text-xs text-white/40 font-mono tracking-wider">{method} {path}</span>
+              <span className="text-xs text-black/50 dark:text-white/40 font-mono tracking-wider">{method} {path}</span>
             </div>
             
-            <div className="bg-white/2 border border-white/5 rounded-xl p-6 font-mono text-sm text-white/70 min-h-100 overflow-auto">
+            <div className="bg-black/5 dark:bg-white/2 border border-black/10 dark:border-white/5 rounded-xl p-6 font-mono text-sm text-black/80 dark:text-white/70 min-h-100 overflow-auto">
               <pre className="whitespace-pre-wrap break-all opacity-80">
                 {JSON.stringify(generatePreview(), null, 2)}
               </pre>
               {count > 3 && (
-                <div className="mt-6 text-white/30 italic text-xs">
+                <div className="mt-6 text-black/40 dark:text-white/30 italic text-xs">
                   ... ({count - 3} more items not shown)
                 </div>
               )}
@@ -286,7 +288,7 @@ function SchemaEditorContent() {
 export default function SchemaEditorPage() {
   return (
     <Suspense fallback={
-      <div className="flex flex-col items-center justify-center h-full text-white/50 py-20">
+      <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50 py-20">
         <RefreshCw className="w-8 h-8 animate-spin mb-4" />
         <p className="font-light tracking-wide">Loading Editor...</p>
       </div>

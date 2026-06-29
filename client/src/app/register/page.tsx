@@ -9,9 +9,9 @@ import { motion } from 'framer-motion';
 import {useRegisterMutation} from '@/hooks/auth/register/useRegisterMutation';
 
 const REGISTER_FIELDS = [
-  { id: 'fullName', label: 'Ad Soyad', type: 'text', name: 'fullName' },
-  { id: 'email', label: 'E-posta', type: 'email', name: 'email' },
-  { id: 'password', label: 'Şifre', type: 'password', name: 'password' },
+  { id: 'fullName', label: 'Full Name', type: 'text', name: 'fullName' },
+  { id: 'email', label: 'E-mail', type: 'email', name: 'email' },
+  { id: 'password', label: 'Password', type: 'password', name: 'password' },
 ];
 
 export default function RegisterPage() {
@@ -43,7 +43,7 @@ export default function RegisterPage() {
             className="flex flex-col gap-5 w-full"
           >
             <h1 className="text-3xl font-bold mb-6 text-center text-white">
-              Kayıt Ol
+              Register
             </h1>
             
             {REGISTER_FIELDS.map((field) => (
@@ -61,13 +61,13 @@ export default function RegisterPage() {
             </Button>
             
             <p className="text-center mt-2 text-sm text-gray-300">
-              Zaten üye misiniz?{' '}
+              Already have an account ?{' '}
               <button 
                 type="button" 
                 onClick={() => router.push('/login')}
                 className="text-white font-semibold hover:underline cursor-pointer"
               >
-                Giriş Yap
+                Sign In
               </button>
             </p>
           </motion.form>

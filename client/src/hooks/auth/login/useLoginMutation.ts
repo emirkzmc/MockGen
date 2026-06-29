@@ -2,7 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 import { loginUser } from '../../../api/authApi';
 import toast from 'react-hot-toast';
 
-export function useLoginMutation(onSuccessCallback?: () => void) {
+export function useLoginMutation(
+  onSuccessCallback?: () => void,
+  onErrorCallback?: (error: any) => void
+) {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
@@ -13,8 +16,12 @@ export function useLoginMutation(onSuccessCallback?: () => void) {
         onSuccessCallback();
       }
     },
-    onError: () => {
-      toast.error('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
+    onError: (error) => {
+      if (onErrorCallback) {
+        onErrorCallback(error);
+      } else {
+        toast.error('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
+      }
     },
   });
 }
