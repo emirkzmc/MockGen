@@ -1,25 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
-import { mockApi } from '@/api';
-import { endpointKeys } from '../../lib/query/keys/endpointKeys';
+import { getEndpoints, getEndpointById, getLogs } from '@/api';
+import { queryKeys } from '@/constants/queryKeys';
 
 export function useGetEndpoints() {
   return useQuery({
-    queryKey: endpointKeys.lists(),
-    queryFn: mockApi.getEndpoints,
+    queryKey: queryKeys.endpoints.list(),
+    queryFn: () => getEndpoints(),
   });
 }
 
 export function useGetEndpoint(id: string | null) {
   return useQuery({
-    queryKey: endpointKeys.detail(id ?? ''),
-    queryFn: () => mockApi.getEndpointById(id!),
+    queryKey: queryKeys.endpoints.detail(id ?? ''),
+    queryFn: () => getEndpointById(id!),
     enabled: !!id,
   });
 }
 
 export function useGetLogs() {
   return useQuery({
-    queryKey: endpointKeys.logs(),
-    queryFn: mockApi.getLogs,
+    queryKey: queryKeys.logs.list(),
+    queryFn: () => getLogs(),
   });
 }

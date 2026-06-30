@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Save, Key } from "lucide-react";
 import toast from "react-hot-toast";
 import { PanelInput } from "@/components/ui/PanelInput";
@@ -9,13 +10,38 @@ import { PanelButton } from "@/components/ui/PanelButton";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export default function SettingsPage() {
+  const [userName, setUserName] = React.useState("User Name");
+  const [userEmail, setUserEmail] = React.useState("user@mockgen.io");
+
+  React.useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const payload = JSON.parse(jsonPayload);
+        if (payload.fullName) {
+          setUserName(payload.fullName);
+        }
+        if (payload.email) {
+          setUserEmail(payload.email);
+        }
+      } catch (e) {
+        console.error("Failed to parse token");
+      }
+    }
+  }, []);
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success("Settings saved successfully");
   };
 
   return (
-    <div className="space-y-16 max-w-4xl">
+    <div className="space-y-16 w-full">
       <div className="border-b border-black/10 dark:border-white/10 pb-8">
         <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">Settings</h1>
         <p className="text-sm text-black/60 dark:text-white/40 mt-2 font-light">Manage your account and API configuration.</p>
@@ -41,14 +67,18 @@ export default function SettingsPage() {
                 <label className="block text-xs text-black/50 dark:text-white/40 uppercase tracking-widest mb-3">Full Name</label>
                 <PanelInput
                   type="text"
-                  defaultValue="Admin User"
+                  value={userName}
+                  readOnly
+                  className="bg-black/5 dark:bg-white/5"
                 />
               </div>
               <div>
                 <label className="block text-xs text-black/50 dark:text-white/40 uppercase tracking-widest mb-3">Email Address</label>
                 <PanelInput
                   type="email"
-                  defaultValue="admin@mockgen.io"
+                  value={userEmail}
+                  readOnly
+                  className="bg-black/5 dark:bg-white/5"
                 />
               </div>
             </div>

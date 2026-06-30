@@ -31,7 +31,7 @@ export default function LogsPage() {
   };
 
   return (
-    <div className="space-y-16 max-w-5xl">
+    <div className="space-y-16 w-full">
       <div className="border-b border-black/10 dark:border-white/10 pb-8">
         <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">Logs & Analytics</h1>
         <p className="text-sm text-black/60 dark:text-white/40 mt-2 font-light">View detailed incoming request payloads.</p>

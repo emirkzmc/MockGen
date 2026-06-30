@@ -27,13 +27,13 @@ export default function EndpointsPage() {
   };
 
   return (
-    <div className="space-y-16 max-w-5xl">
+    <div className="space-y-16 w-full">
       <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-8">
         <div>
           <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">Endpoints</h1>
           <p className="text-sm text-black/60 dark:text-white/40 mt-2 font-light">Manage and create new API endpoints.</p>
         </div>
-        <PanelButton href="/schema-editor" icon={<Plus className="w-4 h-4" />}>
+        <PanelButton href="/endpoints/create" icon={<Plus className="w-4 h-4" />}>
           Create New
         </PanelButton>
       </div>
@@ -54,7 +54,7 @@ export default function EndpointsPage() {
             <Network className="w-12 h-12 text-black/20 dark:text-white/20 mb-6" />
             <h3 className="text-xl font-light text-black dark:text-white mb-2 tracking-wide">No endpoints found</h3>
             <p className="text-black/50 dark:text-white/40 mb-8 font-light">Get started by creating your first mock endpoint.</p>
-            <PanelButton href="/schema-editor" icon={<Plus className="w-4 h-4" />}>
+            <PanelButton href="/endpoints/create" icon={<Plus className="w-4 h-4" />}>
               Create Endpoint
             </PanelButton>
           </div>
@@ -65,6 +65,7 @@ export default function EndpointsPage() {
                 <tr>
                   <th className="pb-4 font-normal">Method</th>
                   <th className="pb-4 font-normal">Path</th>
+                  <th className="pb-4 font-normal">Schema</th>
                   <th className="pb-4 font-normal">Mock Count</th>
                   <th className="pb-4 font-normal text-right">Actions</th>
                 </tr>
@@ -78,6 +79,9 @@ export default function EndpointsPage() {
                       </span>
                     </td>
                     <td className="py-5 font-mono text-black/90 dark:text-white/90">{ep.path}</td>
+                    <td className="py-5 text-black/70 dark:text-white/70">
+                      {ep.schemaName || "Unknown Schema"}
+                    </td>
                     <td className="py-5">
                       <span className="text-black/50 dark:text-white/40 font-light">
                         {ep.count} items
@@ -91,7 +95,7 @@ export default function EndpointsPage() {
                       />
                       <PanelIconButton 
                         icon={<Edit className="w-4 h-4" />} 
-                        href={`/schema-editor?id=${ep.id}`} 
+                        href={`/endpoints/create?id=${ep.id}`} 
                         title="Edit" 
                       />
                       <PanelIconButton 

@@ -22,8 +22,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex h-screen w-full bg-[#EDEBDE] dark:bg-[#260F09] text-[#260F09] dark:text-[#EDEBDE] overflow-hidden relative transition-colors duration-300">
-      {/* Background glowing div */}
-      <div className="absolute left-0 top-0 h-full w-[400px] rounded-full blur-3xl bg-[#C57677] dark:bg-[#630102] -translate-x-1/2 opacity-60 pointer-events-none z-0 transition-colors duration-300" />
+      <div className="absolute left-0 top-0 h-full w-100 rounded-full blur-3xl bg-[#C57677] dark:bg-[#630102] -translate-x-1/2 opacity-60 pointer-events-none z-0 transition-colors duration-300" />
       
       <div className="flex h-full w-full z-10 relative">
         <Sidebar items={DASHBOARD_NAV_ITEMS} />

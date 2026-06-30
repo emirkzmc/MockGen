@@ -9,8 +9,8 @@ export interface NavItem {
 
 export const DASHBOARD_NAV_ITEMS: NavItem[] = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Schemas", href: "/schemas", icon: Database },
   { name: "Endpoints", href: "/endpoints", icon: Network },
-  { name: "Schema Editor", href: "/schema-editor", icon: Database },
   { name: "Logs & Analytics", href: "/logs", icon: ScrollText },
   { name: "Settings", href: "/settings", icon: Settings },
 ];

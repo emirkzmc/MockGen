@@ -9,7 +9,7 @@ export class AuthController {
   async register(
     @Body() body: Record<string, unknown>,
   ): Promise<Record<string, unknown>> {
-    return this.authService.register(body.email, body.password);
+    return this.authService.register(body.email, body.password, body.fullName);
   }
 
   @HttpCode(HttpStatus.OK)

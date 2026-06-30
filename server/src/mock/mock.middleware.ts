@@ -23,7 +23,6 @@ export class MockMiddleware implements NestMiddleware {
 
     const { schema, userId } = endpointResult;
 
-    // Log the request
     try {
       await this.storage.saveLog(
         userId,
@@ -36,33 +35,52 @@ export class MockMiddleware implements NestMiddleware {
       console.error('Failed to save log', err);
     }
 
-    const generatedData = this.generateFromSchema(schema);
-    res.status(200).json(generatedData);
+    const count = typeof endpointResult.count === 'number' ? endpointResult.count : 5;
+    
+    const response = this.generateMockData(schema, count);
+
+    res.status(200).json(response);
   }
 
-  private generateFromSchema(
+  private generateMockData(
     schema: Record<string, unknown>,
+    count: number,
+    index?: number,
   ): Record<string, unknown> {
     const result: Record<string, unknown> = {};
 
-    for (const key of Object.keys(schema)) {
-      const type = schema[key];
-      if (type === 'string') {
-        result[key] = faker.lorem.word();
-      } else if (type === 'number') {
-        result[key] = faker.number.int();
-      } else if (type === 'boolean') {
-        result[key] = faker.datatype.boolean();
-      } else if (type === 'uuid') {
-        result[key] = faker.string.uuid();
-      } else if (type === 'email') {
-        result[key] = faker.internet.email();
-      } else if (type === 'name') {
-        result[key] = faker.person.fullName();
+    for (const [key, value] of Object.entries(schema)) {
+      if (typeof value === 'object' && value !== null && (value as Record<string, unknown>).type === 'array') {
+        const itemType = (value as Record<string, unknown>).itemType;
+        const subSchema = typeof itemType === 'object' && itemType !== null ? itemType as Record<string, unknown> : {};
+        result[key] = Array.from({ length: count }, (_, i) => this.generateMockData(subSchema, count, i));
+      } else if (value === 'id') {
+        result[key] = (index ?? 0) + 1;
+      } else if (typeof value === 'string') {
+        result[key] = this.generateValue(value);
       } else {
-        result[key] = faker.lorem.word();
+        result[key] = value;
       }
     }
     return result;
+  }
+
+  private generateValue(type: string): unknown {
+    switch (type) {
+      case 'string': return faker.lorem.word();
+      case 'number': return faker.number.int();
+      case 'boolean': return faker.datatype.boolean();
+      case 'uuid': return faker.string.uuid();
+      case 'email': return faker.internet.email();
+      case 'firstName': return faker.person.firstName();
+      case 'lastName': return faker.person.lastName();
+      case 'age': return faker.number.int({ min: 18, max: 65 });
+      case 'isActive': return faker.datatype.boolean();
+      case 'name': return faker.person.fullName();
+      case 'city': return faker.location.city();
+      case 'phone': return faker.phone.number();
+      case 'date': return faker.date.recent().toISOString();
+      default: return faker.lorem.word();
+    }
   }
 }

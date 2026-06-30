@@ -12,9 +12,12 @@ export class MockController {
 
   @Post('generate')
   generatePreview(
-    @Body() schema: Record<string, unknown>,
+    @Body() body: Record<string, unknown>,
   ): Record<string, unknown> {
-    return this.generateFromSchema(schema);
+    const schema = typeof body.schema === 'object' && body.schema !== null ? (body.schema as Record<string, unknown>) : {};
+    const count = typeof body.count === 'number' ? body.count : 1;
+    
+    return this.generateFromSchema(schema, count);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -52,12 +55,10 @@ export class MockController {
     const userId = typeof user.userId === 'string' ? user.userId : '';
     const path = typeof body.path === 'string' ? body.path : '';
     const method = typeof body.method === 'string' ? body.method : '';
-    const schema =
-      typeof body.schema === 'object' && body.schema !== null
-        ? (body.schema as Record<string, unknown>)
-        : {};
+    const count = typeof body.count === 'number' ? body.count : 5;
+    const schemaId = typeof body.schemaId === 'string' ? body.schemaId : '';
 
-    return this.storage.save(userId, path, method, schema);
+    return this.storage.save(userId, schemaId, path, method, count);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -71,12 +72,10 @@ export class MockController {
     const userId = typeof user.userId === 'string' ? user.userId : '';
     const path = typeof body.path === 'string' ? body.path : '';
     const method = typeof body.method === 'string' ? body.method : '';
-    const schema =
-      typeof body.schema === 'object' && body.schema !== null
-        ? (body.schema as Record<string, unknown>)
-        : {};
+    const count = typeof body.count === 'number' ? body.count : 5;
+    const schemaId = typeof body.schemaId === 'string' ? body.schemaId : '';
 
-    return this.storage.updateEndpoint(id, userId, path, method, schema);
+    return this.storage.updateEndpoint(id, userId, schemaId, path, method, count);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -103,27 +102,42 @@ export class MockController {
 
   private generateFromSchema(
     schema: Record<string, unknown>,
+    count: number,
+    index?: number,
   ): Record<string, unknown> {
     const result: Record<string, unknown> = {};
 
-    for (const key of Object.keys(schema)) {
-      const type = schema[key];
-      if (type === 'string') {
-        result[key] = faker.lorem.word();
-      } else if (type === 'number') {
-        result[key] = faker.number.int();
-      } else if (type === 'boolean') {
-        result[key] = faker.datatype.boolean();
-      } else if (type === 'uuid') {
-        result[key] = faker.string.uuid();
-      } else if (type === 'email') {
-        result[key] = faker.internet.email();
-      } else if (type === 'name') {
-        result[key] = faker.person.fullName();
+    for (const [key, value] of Object.entries(schema)) {
+      if (typeof value === 'object' && value !== null && (value as Record<string, unknown>).type === 'array') {
+        const itemType = (value as Record<string, unknown>).itemType;
+        const subSchema = typeof itemType === 'object' && itemType !== null ? itemType as Record<string, unknown> : {};
+        result[key] = Array.from({ length: count }, (_, i) => this.generateFromSchema(subSchema, count, i));
+      } else if (value === 'id') {
+        result[key] = (index ?? 0) + 1;
+      } else if (typeof value === 'string') {
+        result[key] = this.generateValue(value);
       } else {
-        result[key] = faker.lorem.word();
+        result[key] = value;
       }
     }
     return result;
+  }
+
+  private generateValue(type: string): unknown {
+    switch (type) {
+      case 'string': return faker.lorem.word();
+      case 'number': return faker.number.int();
+      case 'boolean': return faker.datatype.boolean();
+      case 'uuid': return faker.string.uuid();
+      case 'email': return faker.internet.email();
+      case 'firstName': return faker.person.firstName();
+      case 'lastName': return faker.person.lastName();
+      case 'age': return faker.number.int({ min: 18, max: 65 });
+      case 'name': return faker.person.fullName();
+      case 'city': return faker.location.city();
+      case 'phone': return faker.phone.number();
+      case 'date': return faker.date.recent().toISOString();
+      default: return faker.lorem.word();
+    }
   }
 }

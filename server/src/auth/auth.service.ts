@@ -19,10 +19,13 @@ export class AuthService {
   async register(
     email: unknown,
     password: unknown,
+    fullName?: unknown,
   ): Promise<Record<string, unknown>> {
     if (typeof email !== 'string' || typeof password !== 'string') {
       throw new ConflictException();
     }
+
+    const nameToSave = typeof fullName === 'string' ? fullName : null;
 
     const checkQuery = `SELECT id FROM users WHERE email = $1 LIMIT 1`;
     const checkResult = await this.pool.query(checkQuery, [email]);
@@ -35,11 +38,11 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const insertQuery = `
-      INSERT INTO users (email, password)
-      VALUES ($1, $2)
-      RETURNING id, email
+      INSERT INTO users (email, password, full_name)
+      VALUES ($1, $2, $3)
+      RETURNING id, email, full_name
     `;
-    const result = await this.pool.query(insertQuery, [email, hashedPassword]);
+    const result = await this.pool.query(insertQuery, [email, hashedPassword, nameToSave]);
     const user: unknown = result.rows[0];
 
     return user as Record<string, unknown>;
@@ -53,7 +56,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const query = `SELECT id, password FROM users WHERE email = $1 LIMIT 1`;
+    const query = `SELECT id, password, full_name FROM users WHERE email = $1 LIMIT 1`;
     const result = await this.pool.query(query, [email]);
 
     if (result.rows.length === 0) {
@@ -77,7 +80,11 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload = { sub: userIdRaw, email };
+    const payload = { 
+      sub: userIdRaw, 
+      email, 
+      fullName: user.full_name || email 
+    };
 
     return {
       access_token: await this.jwtService.signAsync(payload),
