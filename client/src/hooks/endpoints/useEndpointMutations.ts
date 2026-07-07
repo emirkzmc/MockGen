@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { createEndpoint, updateEndpoint, deleteEndpoint } from '@/api';
+import { createEndpoint, updateEndpoint, deleteEndpoint } from '@/api/endpointApi';
 import type { CreateEndpointPayload } from '@/domain/endpointDomains';
 import { queryKeys } from '@/constants/queryKeys';
 

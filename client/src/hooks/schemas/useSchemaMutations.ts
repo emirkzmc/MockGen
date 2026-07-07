@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { createSchema, updateSchema, deleteSchema } from '@/api';
+import { createSchema, updateSchema, deleteSchema } from '@/api/schemaApi';
 import type { CreateSchemaPayload } from '@/domain/schemaDomains';
 import { queryKeys } from '@/constants/queryKeys';
 

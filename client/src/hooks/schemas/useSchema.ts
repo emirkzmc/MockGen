@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getSchemas, getSchemaById } from '@/api';
+import { getSchemas, getSchemaById } from '@/api/schemaApi';
 import { queryKeys } from '@/constants/queryKeys';
 
 export function useGetSchemas() {

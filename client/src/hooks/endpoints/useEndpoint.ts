@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getEndpoints, getEndpointById, getLogs } from '@/api';
+import { getEndpoints, getEndpointById } from '@/api/endpointApi';
+import { getLogs } from '@/api/logApi';
 import { queryKeys } from '@/constants/queryKeys';
 
 export function useGetEndpoints() {
