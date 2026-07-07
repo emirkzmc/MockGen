@@ -14,14 +14,24 @@ export class MockMiddleware implements NestMiddleware {
       return;
     }
 
-    const endpointResult = await this.storage.findByPathAndMethod(req.path, req.method);
+    const reqStatusHeader = req.headers['x-mock-status'];
+    let requestedStatusCode: number | undefined = undefined;
+    
+    if (typeof reqStatusHeader === 'string') {
+      const parsed = parseInt(reqStatusHeader, 10);
+      if (!isNaN(parsed)) {
+        requestedStatusCode = parsed;
+      }
+    }
+
+    const endpointResult = await this.storage.findByPathAndMethod(req.path, req.method, requestedStatusCode);
 
     if (!endpointResult) {
       next();
       return;
     }
 
-    const { schema, userId } = endpointResult;
+    const { schema, userId, statusCode } = endpointResult;
 
     try {
       await this.storage.saveLog(
@@ -37,9 +47,9 @@ export class MockMiddleware implements NestMiddleware {
 
     const count = typeof endpointResult.count === 'number' ? endpointResult.count : 5;
     
-    const response = this.generateMockData(schema, count);
+    const response = schema ? this.generateMockData(schema, count) : {};
 
-    res.status(200).json(response);
+    res.status(statusCode).json(response);
   }
 
   private generateMockData(

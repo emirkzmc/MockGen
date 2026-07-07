@@ -80,7 +80,7 @@ export default function EndpointsPage() {
                     </td>
                     <td className="py-5 font-mono text-black/90 dark:text-white/90">{ep.path}</td>
                     <td className="py-5 text-black/70 dark:text-white/70">
-                      {ep.schemaName || "Unknown Schema"}
+                      {ep.responses?.[0]?.schemaName || "Unknown Schema"}
                     </td>
                     <td className="py-5">
                       <span className="text-black/50 dark:text-white/40 font-light">

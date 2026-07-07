@@ -56,9 +56,10 @@ export class MockController {
     const path = typeof body.path === 'string' ? body.path : '';
     const method = typeof body.method === 'string' ? body.method : '';
     const count = typeof body.count === 'number' ? body.count : 5;
-    const schemaId = typeof body.schemaId === 'string' ? body.schemaId : '';
+    const requestSchemaId = typeof body.requestSchemaId === 'string' ? body.requestSchemaId : null;
+    const responses = Array.isArray(body.responses) ? body.responses : [];
 
-    return this.storage.save(userId, schemaId, path, method, count);
+    return this.storage.save(userId, requestSchemaId, path, method, count, responses as Array<{ statusCode: number; schemaId: string }>);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -73,9 +74,10 @@ export class MockController {
     const path = typeof body.path === 'string' ? body.path : '';
     const method = typeof body.method === 'string' ? body.method : '';
     const count = typeof body.count === 'number' ? body.count : 5;
-    const schemaId = typeof body.schemaId === 'string' ? body.schemaId : '';
+    const requestSchemaId = typeof body.requestSchemaId === 'string' ? body.requestSchemaId : null;
+    const responses = Array.isArray(body.responses) ? body.responses : [];
 
-    return this.storage.updateEndpoint(id, userId, schemaId, path, method, count);
+    return this.storage.updateEndpoint(id, userId, requestSchemaId, path, method, count, responses as Array<{ statusCode: number; schemaId: string }>);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -3,15 +3,23 @@ export interface EndpointData {
   method: string;
   path: string;
   count: number;
-  schemaId: string;
-  schemaName?: string;
+  requestSchemaId?: string | null;
+  responses: Array<{
+    statusCode: number;
+    schemaId: string;
+    schemaName?: string;
+  }>;
   createdAt: string;
 }
 
 export interface CreateEndpointPayload {
   method: string;
   path: string;
-  schemaId: string;
+  requestSchemaId?: string | null;
+  responses: Array<{
+    statusCode: number;
+    schemaId: string;
+  }>;
   count: number;
 }
 

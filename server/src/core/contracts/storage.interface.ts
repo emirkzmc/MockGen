@@ -22,13 +22,15 @@ export interface IStorage {
   findByPathAndMethod(
     path: string,
     method: string,
-  ): Promise<{ schema: Record<string, unknown>; userId: string; count: number } | null>;
+    statusCode?: number,
+  ): Promise<{ schema: Record<string, unknown> | null; userId: string; count: number; statusCode: number } | null>;
   save(
     userId: string,
-    schemaId: string,
+    requestSchemaId: string | null,
     path: string,
     method: string,
     count: number,
+    responses: Array<{ statusCode: number; schemaId: string }>,
   ): Promise<Record<string, unknown>>;
   findAllEndpoints(userId: string): Promise<Record<string, unknown>[]>;
   findEndpointById(
@@ -38,10 +40,11 @@ export interface IStorage {
   updateEndpoint(
     id: string,
     userId: string,
-    schemaId: string,
+    requestSchemaId: string | null,
     path: string,
     method: string,
     count: number,
+    responses: Array<{ statusCode: number; schemaId: string }>,
   ): Promise<Record<string, unknown>>;
   deleteEndpoint(id: string, userId: string): Promise<void>;
   getLogs(userId: string): Promise<Record<string, unknown>[]>;
