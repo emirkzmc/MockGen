@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import apiClient from '../lib/apiClient';
 import { AuthApiMethod } from '../constants/MethodNames';
 import type { LoginRequest, AuthResponse, RegisterRequest, RegisterResponse } from '../domain/authDomains';
 
