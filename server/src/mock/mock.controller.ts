@@ -21,7 +21,7 @@ export class MockController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('endpoints')
+  @Get('endpoints/search')
   async getEndpoints(
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
   ): Promise<Record<string, unknown>[]> {
@@ -46,7 +46,7 @@ export class MockController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('endpoints')
+  @Post('endpoints/create')
   async saveEndpoint(
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
     @Body() body: Record<string, unknown>,
@@ -63,7 +63,7 @@ export class MockController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put('endpoints/:id')
+  @Put('endpoints/update/:id')
   async updateEndpoint(
     @Param('id') id: string,
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
@@ -81,7 +81,7 @@ export class MockController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete('endpoints/:id')
+  @Delete('endpoints/delete/:id')
   async deleteEndpoint(
     @Param('id') id: string,
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
@@ -93,7 +93,7 @@ export class MockController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('logs')
+  @Get('logs/search')
   async getLogs(
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
   ): Promise<Record<string, unknown>[]> {

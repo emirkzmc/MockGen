@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import apiClient from '../lib/apiClient';
 import { EndpointApiMethod } from '../constants/MethodNames';
 import { buildSearchPath } from '../helpers/buildSearchPath';
 import type {

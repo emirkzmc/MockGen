@@ -10,7 +10,7 @@ export class SchemaController {
   constructor(@Inject(STORAGE_TOKEN) private readonly storage: IStorage) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get('search')
   async getSchemas(
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
   ): Promise<Record<string, unknown>[]> {
@@ -35,7 +35,7 @@ export class SchemaController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post()
+  @Post('create')
   async createSchema(
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
     @Body() body: Record<string, unknown>,
@@ -49,7 +49,7 @@ export class SchemaController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put(':id')
+  @Put('update/:id')
   async updateSchema(
     @Param('id') id: string,
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
@@ -64,7 +64,7 @@ export class SchemaController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
+  @Delete('delete/:id')
   async deleteSchema(
     @Param('id') id: string,
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
