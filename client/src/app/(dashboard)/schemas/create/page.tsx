@@ -25,8 +25,8 @@ function FieldRow({ field, updateField, removeField, addSubField, depth = 0 }: {
           <div className="absolute -left-5 bottom-5 w-4 h-px bg-black/10 dark:bg-white/10" />
         </>
       )}
-      <div className="flex items-end space-x-6 group">
-        <div className="flex-1">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end space-y-4 sm:space-y-0 sm:space-x-6 group w-full">
+        <div className="flex-1 w-full">
           {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Field Name</label>}
           <PanelInput
             type="text"
@@ -36,7 +36,7 @@ function FieldRow({ field, updateField, removeField, addSubField, depth = 0 }: {
             className="px-2 py-2 text-sm font-mono border-black/20 dark:border-white/10"
           />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 w-full">
           {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Type</label>}
           <PanelSelect
             value={field.type}
@@ -263,7 +263,7 @@ function SchemaEditorContent() {
 
   return (
     <div className="space-y-12 w-full">
-      <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0 border-b border-black/10 dark:border-white/10 pb-8">
         <div className="flex items-center space-x-6">
           <Link href="/schemas" className="text-black/60 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors">
             <ArrowLeft className="w-5 h-5" />

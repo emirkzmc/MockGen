@@ -28,7 +28,7 @@ export default function EndpointsPage() {
 
   return (
     <div className="space-y-16 w-full">
-      <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0 border-b border-black/10 dark:border-white/10 pb-8">
         <div>
           <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">Endpoints</h1>
           <p className="text-sm text-black/60 dark:text-white/40 mt-2 font-light">Manage and create new API endpoints.</p>

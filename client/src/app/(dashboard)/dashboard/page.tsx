@@ -13,7 +13,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-16 w-full">
-      <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0 border-b border-black/10 dark:border-white/10 pb-8">
         <div>
           <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">Overview</h1>
           <p className="text-sm text-black/60 dark:text-white/40 mt-2 font-light">Manage your endpoints and requests.</p>
@@ -23,7 +23,7 @@ export default function DashboardPage() {
         </PanelButton>
       </div>
 
-      <div className="grid grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12">
         <div>
           <p className="text-xs text-black/40 dark:text-white/30 uppercase tracking-widest mb-3">Total Endpoints</p>
           <p className="text-6xl font-light text-[#260F09] dark:text-[#EDEBDE]">

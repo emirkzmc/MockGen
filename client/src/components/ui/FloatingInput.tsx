@@ -12,7 +12,7 @@ export const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
     const [isFilled, setIsFilled] = React.useState(false);
 
     return (
-      <div className={`w-86.25 ${className}`}>
+      <div className={`w-full md:w-86.25 ${className}`}>
         <div className="relative h-10.5 w-full">
           <input
             id={generatedId}
