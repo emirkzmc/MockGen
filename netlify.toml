@@ -1,2 +1,2 @@
 base = "client"
-publish = ".next"   ✅ (Netlify bunu otomatik client/.next'e çevirir)
+publish = ".next"
