@@ -9,7 +9,10 @@ export interface IStorage {
     schema: Record<string, unknown>,
   ): Promise<Record<string, unknown>>;
   findAllSchemas(userId: string): Promise<Record<string, unknown>[]>;
-  findSchemaById(id: string, userId: string): Promise<Record<string, unknown> | null>;
+  findSchemaById(
+    id: string,
+    userId: string,
+  ): Promise<Record<string, unknown> | null>;
   updateSchema(
     id: string,
     userId: string,
@@ -23,7 +26,12 @@ export interface IStorage {
     path: string,
     method: string,
     statusCode?: number,
-  ): Promise<{ schema: Record<string, unknown> | null; userId: string; count: number; statusCode: number } | null>;
+  ): Promise<{
+    schema: Record<string, unknown> | null;
+    userId: string;
+    count: number;
+    statusCode: number;
+  } | null>;
   save(
     userId: string,
     requestSchemaId: string | null,

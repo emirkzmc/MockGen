@@ -7,4 +7,3 @@ import { MockModule } from './mock/mock.module';
   imports: [DatabaseModule, AuthModule, MockModule],
 })
 export class AppModule {}
-

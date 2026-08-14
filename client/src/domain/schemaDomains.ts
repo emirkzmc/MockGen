@@ -19,7 +19,7 @@ export interface SchemaField {
   schema?: Record<string, unknown>;
 }
 
-export interface SchemaSearchParams extends Record<string, any> {
+export interface SchemaSearchParams extends Record<string, unknown> {
   search?: string;
 }
 

@@ -2,6 +2,44 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Pool } from 'pg';
 import { IStorage, PG_POOL_TOKEN } from '../contracts/storage.interface';
 
+interface SchemaRow {
+  id: string;
+  name: string;
+  schema: Record<string, unknown>;
+  createdAt: Date;
+  user_id?: string;
+}
+
+interface EndpointRow {
+  id: string;
+  path: string;
+  method: string;
+  requestSchemaId: string | null;
+  count: number;
+  createdAt: Date;
+  user_id?: string;
+  mock_count?: number;
+  responses?: ResponseRow[];
+  schema?: Record<string, unknown>;
+  status_code?: number;
+}
+
+interface ResponseRow {
+  endpoint_id?: string;
+  statusCode: number;
+  schemaId: string;
+  schemaName?: string;
+}
+
+interface LogRow {
+  id: string;
+  method: string;
+  path: string;
+  headers: Record<string, unknown>;
+  body: Record<string, unknown> | null;
+  timestamp: Date;
+}
+
 @Injectable()
 export class DatabaseStorageService implements IStorage {
   constructor(@Inject(PG_POOL_TOKEN) private readonly pool: Pool) {}
@@ -17,8 +55,12 @@ export class DatabaseStorageService implements IStorage {
       VALUES ($1, $2, $3)
       RETURNING id, name, schema, created_at as "createdAt"
     `;
-    const res = await this.pool.query(query, [userId, name, JSON.stringify(schema)]);
-    return res.rows[0];
+    const res = await this.pool.query<SchemaRow>(query, [
+      userId,
+      name,
+      JSON.stringify(schema),
+    ]);
+    return res.rows[0] as unknown as Record<string, unknown>;
   }
 
   async findAllSchemas(userId: string): Promise<Record<string, unknown>[]> {
@@ -28,20 +70,23 @@ export class DatabaseStorageService implements IStorage {
       WHERE user_id = $1
       ORDER BY created_at DESC
     `;
-    const result = await this.pool.query(query, [userId]);
-    return result.rows;
+    const result = await this.pool.query<SchemaRow>(query, [userId]);
+    return result.rows as unknown as Record<string, unknown>[];
   }
 
-  async findSchemaById(id: string, userId: string): Promise<Record<string, unknown> | null> {
+  async findSchemaById(
+    id: string,
+    userId: string,
+  ): Promise<Record<string, unknown> | null> {
     const query = `
       SELECT id, name, schema, created_at as "createdAt"
       FROM schemas
       WHERE id = $1 AND user_id = $2
       LIMIT 1
     `;
-    const result = await this.pool.query(query, [id, userId]);
+    const result = await this.pool.query<SchemaRow>(query, [id, userId]);
     if (result.rows.length === 0) return null;
-    return result.rows[0];
+    return result.rows[0] as unknown as Record<string, unknown>;
   }
 
   async updateSchema(
@@ -56,11 +101,16 @@ export class DatabaseStorageService implements IStorage {
       WHERE id = $3 AND user_id = $4
       RETURNING id, name, schema, created_at as "createdAt"
     `;
-    const res = await this.pool.query(query, [name, JSON.stringify(schema), id, userId]);
+    const res = await this.pool.query<SchemaRow>(query, [
+      name,
+      JSON.stringify(schema),
+      id,
+      userId,
+    ]);
     if (res.rows.length === 0) {
       throw new Error('Schema not found or unauthorized');
     }
-    return res.rows[0];
+    return res.rows[0] as unknown as Record<string, unknown>;
   }
 
   async deleteSchema(id: string, userId: string): Promise<void> {
@@ -76,7 +126,12 @@ export class DatabaseStorageService implements IStorage {
     path: string,
     method: string,
     statusCode?: number,
-  ): Promise<{ schema: Record<string, unknown> | null; userId: string; count: number; statusCode: number } | null> {
+  ): Promise<{
+    schema: Record<string, unknown> | null;
+    userId: string;
+    count: number;
+    statusCode: number;
+  } | null> {
     let query = `
       SELECT e.user_id, e.mock_count, er.status_code, s.schema
       FROM endpoints e
@@ -93,7 +148,7 @@ export class DatabaseStorageService implements IStorage {
     }
     query += ` LIMIT 1`;
 
-    const result = await this.pool.query(query, params);
+    const result = await this.pool.query<EndpointRow>(query, params);
 
     if (result.rows.length === 0) {
       return null;
@@ -101,11 +156,17 @@ export class DatabaseStorageService implements IStorage {
 
     const rawSchema: unknown = result.rows[0].schema;
     return {
-      schema: (typeof rawSchema === 'object' && rawSchema !== null && !Array.isArray(rawSchema)) 
-        ? (rawSchema as Record<string, unknown>) 
-        : null,
-      userId: result.rows[0].user_id,
-      count: typeof result.rows[0].mock_count === 'number' ? result.rows[0].mock_count : 5,
+      schema:
+        typeof rawSchema === 'object' &&
+        rawSchema !== null &&
+        !Array.isArray(rawSchema)
+          ? (rawSchema as Record<string, unknown>)
+          : null,
+      userId: result.rows[0].user_id || '',
+      count:
+        typeof result.rows[0].mock_count === 'number'
+          ? result.rows[0].mock_count
+          : 5,
       statusCode: result.rows[0].status_code || 200,
     };
   }
@@ -128,28 +189,46 @@ export class DatabaseStorageService implements IStorage {
         DO UPDATE SET request_schema_id = EXCLUDED.request_schema_id, user_id = EXCLUDED.user_id, mock_count = EXCLUDED.mock_count
         RETURNING id, request_schema_id as "requestSchemaId", path, method, mock_count as "count", created_at as "createdAt"
       `;
-      const res = await client.query(query, [userId, requestSchemaId, path, method, count]);
-      const endpoint = res.rows[0];
+      const res = await client.query(query, [
+        userId,
+        requestSchemaId,
+        path,
+        method,
+        count,
+      ]);
+      const endpoint = res.rows[0] as EndpointRow;
 
-      await client.query(`DELETE FROM endpoint_responses WHERE endpoint_id = $1`, [endpoint.id]);
-      
-      const responseRecords: Array<{ statusCode: number; schemaId: string }> = [];
+      await client.query(
+        `DELETE FROM endpoint_responses WHERE endpoint_id = $1`,
+        [endpoint.id],
+      );
+
+      const responseRecords: Array<{ statusCode: number; schemaId: string }> =
+        [];
       let hasDefault = false;
       for (const [index, r] of responses.entries()) {
-        const isDefault = r.statusCode === 200 || (!hasDefault && index === responses.length - 1);
+        const isDefault =
+          r.statusCode === 200 ||
+          (!hasDefault && index === responses.length - 1);
         if (isDefault) hasDefault = true;
-        
-        await client.query(`
+
+        await client.query(
+          `
           INSERT INTO endpoint_responses (endpoint_id, schema_id, status_code, is_default)
           VALUES ($1, $2, $3, $4)
-        `, [endpoint.id, r.schemaId, r.statusCode, isDefault]);
-        
-        responseRecords.push({ statusCode: r.statusCode, schemaId: r.schemaId });
+        `,
+          [endpoint.id, r.schemaId, r.statusCode, isDefault],
+        );
+
+        responseRecords.push({
+          statusCode: r.statusCode,
+          schemaId: r.schemaId,
+        });
       }
-      
+
       await client.query('COMMIT');
       endpoint.responses = responseRecords;
-      return endpoint;
+      return endpoint as unknown as Record<string, unknown>;
     } catch (e) {
       await client.query('ROLLBACK');
       throw e;
@@ -165,11 +244,11 @@ export class DatabaseStorageService implements IStorage {
       WHERE e.user_id = $1
       ORDER BY e.created_at DESC
     `;
-    const result = await this.pool.query(query, [userId]);
+    const result = await this.pool.query<EndpointRow>(query, [userId]);
     const endpoints = result.rows;
-    
+
     if (endpoints.length > 0) {
-      const endpointIds = endpoints.map(e => e.id);
+      const endpointIds = endpoints.map((e) => e.id);
       const responsesQuery = `
         SELECT er.endpoint_id, er.status_code as "statusCode", er.schema_id as "schemaId", s.name as "schemaName"
         FROM endpoint_responses er
@@ -177,16 +256,23 @@ export class DatabaseStorageService implements IStorage {
         WHERE er.endpoint_id = ANY($1)
         ORDER BY er.status_code ASC
       `;
-      const responsesResult = await this.pool.query(responsesQuery, [endpointIds]);
-      
+      const responsesResult = await this.pool.query<ResponseRow>(
+        responsesQuery,
+        [endpointIds],
+      );
+
       for (const endpoint of endpoints) {
         endpoint.responses = responsesResult.rows
-          .filter(r => r.endpoint_id === endpoint.id)
-          .map(r => ({ statusCode: r.statusCode, schemaId: r.schemaId, schemaName: r.schemaName }));
+          .filter((r) => r.endpoint_id === endpoint.id)
+          .map((r) => ({
+            statusCode: r.statusCode,
+            schemaId: r.schemaId,
+            schemaName: r.schemaName,
+          }));
       }
     }
-    
-    return endpoints;
+
+    return endpoints as unknown as Record<string, unknown>[];
   }
 
   async findEndpointById(
@@ -201,9 +287,9 @@ export class DatabaseStorageService implements IStorage {
     `;
     const result = await this.pool.query(query, [id, userId]);
     if (result.rows.length === 0) return null;
-    
-    const endpoint = result.rows[0];
-    
+
+    const endpoint = result.rows[0] as EndpointRow;
+
     const responsesQuery = `
       SELECT er.status_code as "statusCode", er.schema_id as "schemaId", s.name as "schemaName"
       FROM endpoint_responses er
@@ -211,10 +297,12 @@ export class DatabaseStorageService implements IStorage {
       WHERE er.endpoint_id = $1
       ORDER BY er.status_code ASC
     `;
-    const responsesResult = await this.pool.query(responsesQuery, [id]);
+    const responsesResult = await this.pool.query<ResponseRow>(responsesQuery, [
+      id,
+    ]);
     endpoint.responses = responsesResult.rows;
-    
-    return endpoint;
+
+    return endpoint as unknown as Record<string, unknown>;
   }
 
   async updateEndpoint(
@@ -235,31 +323,50 @@ export class DatabaseStorageService implements IStorage {
         WHERE id = $5 AND user_id = $6
         RETURNING id, path, method, request_schema_id as "requestSchemaId", mock_count as "count", created_at as "createdAt"
       `;
-      const res = await client.query(query, [path, method, requestSchemaId, count, id, userId]);
+      const res = await client.query(query, [
+        path,
+        method,
+        requestSchemaId,
+        count,
+        id,
+        userId,
+      ]);
       if (res.rows.length === 0) {
         throw new Error('Endpoint not found or unauthorized');
       }
-      const endpoint = res.rows[0];
+      const endpoint = res.rows[0] as EndpointRow;
 
-      await client.query(`DELETE FROM endpoint_responses WHERE endpoint_id = $1`, [id]);
-      
-      const responseRecords: Array<{ statusCode: number; schemaId: string }> = [];
+      await client.query(
+        `DELETE FROM endpoint_responses WHERE endpoint_id = $1`,
+        [id],
+      );
+
+      const responseRecords: Array<{ statusCode: number; schemaId: string }> =
+        [];
       let hasDefault = false;
       for (const [index, r] of responses.entries()) {
-        const isDefault = r.statusCode === 200 || (!hasDefault && index === responses.length - 1);
+        const isDefault =
+          r.statusCode === 200 ||
+          (!hasDefault && index === responses.length - 1);
         if (isDefault) hasDefault = true;
-        
-        await client.query(`
+
+        await client.query(
+          `
           INSERT INTO endpoint_responses (endpoint_id, schema_id, status_code, is_default)
           VALUES ($1, $2, $3, $4)
-        `, [id, r.schemaId, r.statusCode, isDefault]);
-        
-        responseRecords.push({ statusCode: r.statusCode, schemaId: r.schemaId });
+        `,
+          [id, r.schemaId, r.statusCode, isDefault],
+        );
+
+        responseRecords.push({
+          statusCode: r.statusCode,
+          schemaId: r.schemaId,
+        });
       }
 
       await client.query('COMMIT');
       endpoint.responses = responseRecords;
-      return endpoint;
+      return endpoint as unknown as Record<string, unknown>;
     } catch (e) {
       await client.query('ROLLBACK');
       throw e;
@@ -284,8 +391,8 @@ export class DatabaseStorageService implements IStorage {
       ORDER BY created_at DESC
       LIMIT 100
     `;
-    const result = await this.pool.query(query, [userId]);
-    return result.rows;
+    const result = await this.pool.query<LogRow>(query, [userId]);
+    return result.rows as unknown as Record<string, unknown>[];
   }
 
   async saveLog(

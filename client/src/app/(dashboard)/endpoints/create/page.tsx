@@ -33,6 +33,7 @@ function EndpointEditorContent() {
 
   useEffect(() => {
     if (existingEndpoint) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPath(existingEndpoint.path);
       setMethod(existingEndpoint.method);
       setCount(existingEndpoint.count || 5);
@@ -47,6 +48,7 @@ function EndpointEditorContent() {
     if (!editId && schemas && schemas.length > 0 && responses.length === 1 && responses[0].schemaId === "") {
       const newResponses = [...responses];
       newResponses[0].schemaId = schemas[0].id;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setResponses(newResponses);
     }
   }, [schemas, editId, responses]);
@@ -235,7 +237,7 @@ function EndpointEditorContent() {
                       setResponses(newResponses);
                     }}
                     options={schemas?.map(s => ({ label: s.name, value: s.id })) || []}
-                    className="w-full flex-grow"
+                    className="w-full grow"
                   />
                   {responses.length > 1 && (
                     <button 
@@ -264,7 +266,7 @@ export default function EndpointEditorPage() {
   return (
     <Suspense fallback={
       <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50 py-20">
-        <RefreshCw className="w-8 h-8 animate-spin mb-4" />
+        <Spinner className="w-5 h-5 text-white/50" />
         <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
     }>

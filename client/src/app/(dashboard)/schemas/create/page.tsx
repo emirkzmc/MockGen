@@ -17,7 +17,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import axios from "axios";
 import { SchemaField } from "@/domain/schemaDomains";
 
-function FieldRow({ field, updateField, removeField, addSubField, depth = 0 }: { field: SchemaField, updateField: any, removeField: any, addSubField: any, depth?: number }) {
+function FieldRow({ field, updateField, removeField, addSubField, depth = 0 }: { field: SchemaField, updateField: (id: string, key: keyof SchemaField, value: string | SchemaField[]) => void, removeField: (id: string) => void, addSubField: (parentId: string) => void, depth?: number }) {
   return (
     <div className="flex flex-col space-y-3 relative">
       {depth > 0 && (
@@ -118,16 +118,17 @@ function SchemaEditorContent() {
 
   useEffect(() => {
     if (existingSchema) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setName(existingSchema.name);
       
       const parseSchemaFields = (schemaObj: Record<string, unknown>): SchemaField[] => {
         return Object.entries(schemaObj).map(([fieldName, typeDef], index) => {
-          if (typeof typeDef === 'object' && typeDef !== null && (typeDef as any).type === 'array') {
+          if (typeof typeDef === 'object' && typeDef !== null && (typeDef as Record<string, unknown>).type === 'array') {
             return {
               id: Date.now().toString() + index,
               name: fieldName,
               type: 'array' as SchemaField["type"],
-              subFields: parseSchemaFields((typeDef as any).itemType || {}),
+              subFields: parseSchemaFields(((typeDef as Record<string, unknown>).itemType as Record<string, unknown>) || {}),
             };
           }
           return {
@@ -332,7 +333,7 @@ function SchemaEditorContent() {
             <div className="bg-black/5 dark:bg-white/2 border border-black/10 dark:border-white/5 rounded-xl p-6 font-mono text-sm text-black/80 dark:text-white/70 min-h-100 overflow-auto relative">
               {isPreviewFetching && (
                 <div className="absolute top-2 right-4 text-xs flex items-center space-x-2 text-black/40 dark:text-white/30">
-                  <RefreshCw className="w-3 h-3 animate-spin" />
+                  <Spinner className="w-5 h-5 text-white/50" />
                   <span>Updating...</span>
                 </div>
               )}
@@ -351,7 +352,7 @@ export default function SchemaEditorPage() {
   return (
     <Suspense fallback={
       <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50 py-20">
-        <RefreshCw className="w-8 h-8 animate-spin mb-4" />
+        <Spinner className="w-8 h-8 text-black/50 mb-4" />
         <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
     }>

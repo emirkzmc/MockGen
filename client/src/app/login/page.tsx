@@ -21,12 +21,13 @@ export default function LoginPage() {
     () => {
       router.push('/dashboard');
     },
-    (error: any) => {
-      const message = error?.response?.data?.message?.toLowerCase() || "";
+    (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string }, status?: number } };
+      const message = err?.response?.data?.message?.toLowerCase() || "";
       
-      if (message.includes("şifre") || message.includes("password") || error?.response?.status === 401) {
+      if (message.includes("şifre") || message.includes("password") || err?.response?.status === 401) {
         setFieldErrors({ password: "Your password is incorrect; please try again." });
-      } else if (message.includes("mail") || message.includes("kullanıcı") || message.includes("user") || error?.response?.status === 404) {
+      } else if (message.includes("mail") || message.includes("kullanıcı") || message.includes("user") || err?.response?.status === 404) {
         setFieldErrors({ email: "No account found for this email address." });
       } else {
         setFieldErrors({ email: "Invalid login credentials.", password: "Invalid login credentials." });
@@ -100,7 +101,7 @@ export default function LoginPage() {
             </div>
 
             <p className="text-center mt-2 text-sm text-gray-300">
-              Don't have an account ?{' '}
+              Don&apos;t have an account ?{' '}
               <button 
                 type="button" 
                 onClick={() => router.push('/register')}
@@ -114,8 +115,8 @@ export default function LoginPage() {
       </div>
       <div className="w-full md:w-1/2 flex flex-col justify-end md:justify-center items-center md:items-end p-8 md:pr-16 z-10 pointer-events-none mt-12 md:mt-0">
         <div className="flex flex-col items-center md:items-end text-white text-center md:text-right uppercase">
-          <h2 className="text-2xl sm:text-3xl md:text-[48px] font-bold leading-tight">THE MOCK DATA GENERATOR</h2>
-          <h2 className="text-2xl sm:text-3xl md:text-[48px] font-bold leading-tight">HERE IT IS</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight">THE MOCK DATA GENERATOR</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight">HERE IT IS</h2>
           <div className="mt-2 md:mt-0 scale-75 md:scale-100 origin-center md:origin-right">
             <AnimatedLabel />
           </div>

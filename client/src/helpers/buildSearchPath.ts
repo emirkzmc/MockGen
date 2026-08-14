@@ -1,4 +1,4 @@
-export function buildSearchPath(base: string, params?: Record<string, any>): string {
+export function buildSearchPath(base: string, params?: Record<string, unknown>): string {
   if (!params) return base;
   
   const searchParams = new URLSearchParams();

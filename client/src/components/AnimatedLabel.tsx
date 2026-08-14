@@ -59,7 +59,7 @@ export function AnimatedLabel() {
         {phase === 'flicker' && (
           <motion.div
             key="flicker"
-            className="text-[96px] font-bold leading-none will-change-transform absolute right-0 whitespace-nowrap"
+            className="text-8xl font-bold leading-none will-change-transform absolute right-0 whitespace-nowrap"
             style={{ fontFamily: FONTS[fontIndex] }}
             exit={{ opacity: 0, filter: "blur(10px)" }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
@@ -72,7 +72,7 @@ export function AnimatedLabel() {
         {phase === 'final' && (
           <motion.div
             key="final"
-            className="text-[96px] font-bold leading-none will-change-transform absolute right-0 origin-right whitespace-nowrap"
+            className="text-8xl font-bold leading-none will-change-transform absolute right-0 origin-right whitespace-nowrap"
             style={{ fontFamily: 'var(--font-poppins)' }}
             initial={{ opacity: 0, filter: "blur(10px)", scale: 0.95 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
@@ -83,7 +83,7 @@ export function AnimatedLabel() {
         )}
       </AnimatePresence>
       <div 
-        className="text-[96px] font-bold leading-none opacity-0 pointer-events-none whitespace-nowrap"
+        className="text-8xl font-bold leading-none opacity-0 pointer-events-none whitespace-nowrap"
         style={{ fontFamily: 'var(--font-poppins)' }}
       >
         MOCKGEN

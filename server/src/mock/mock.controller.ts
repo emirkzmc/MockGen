@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Inject } from '@nestjs/common';
 import type { IStorage } from '../core/contracts/storage.interface';
@@ -14,9 +25,12 @@ export class MockController {
   generatePreview(
     @Body() body: Record<string, unknown>,
   ): Record<string, unknown> {
-    const schema = typeof body.schema === 'object' && body.schema !== null ? (body.schema as Record<string, unknown>) : {};
+    const schema =
+      typeof body.schema === 'object' && body.schema !== null
+        ? (body.schema as Record<string, unknown>)
+        : {};
     const count = typeof body.count === 'number' ? body.count : 1;
-    
+
     return this.generateFromSchema(schema, count);
   }
 
@@ -56,10 +70,18 @@ export class MockController {
     const path = typeof body.path === 'string' ? body.path : '';
     const method = typeof body.method === 'string' ? body.method : '';
     const count = typeof body.count === 'number' ? body.count : 5;
-    const requestSchemaId = typeof body.requestSchemaId === 'string' ? body.requestSchemaId : null;
+    const requestSchemaId =
+      typeof body.requestSchemaId === 'string' ? body.requestSchemaId : null;
     const responses = Array.isArray(body.responses) ? body.responses : [];
 
-    return this.storage.save(userId, requestSchemaId, path, method, count, responses as Array<{ statusCode: number; schemaId: string }>);
+    return this.storage.save(
+      userId,
+      requestSchemaId,
+      path,
+      method,
+      count,
+      responses as Array<{ statusCode: number; schemaId: string }>,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -74,10 +96,19 @@ export class MockController {
     const path = typeof body.path === 'string' ? body.path : '';
     const method = typeof body.method === 'string' ? body.method : '';
     const count = typeof body.count === 'number' ? body.count : 5;
-    const requestSchemaId = typeof body.requestSchemaId === 'string' ? body.requestSchemaId : null;
+    const requestSchemaId =
+      typeof body.requestSchemaId === 'string' ? body.requestSchemaId : null;
     const responses = Array.isArray(body.responses) ? body.responses : [];
 
-    return this.storage.updateEndpoint(id, userId, requestSchemaId, path, method, count, responses as Array<{ statusCode: number; schemaId: string }>);
+    return this.storage.updateEndpoint(
+      id,
+      userId,
+      requestSchemaId,
+      path,
+      method,
+      count,
+      responses as Array<{ statusCode: number; schemaId: string }>,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -110,10 +141,19 @@ export class MockController {
     const result: Record<string, unknown> = {};
 
     for (const [key, value] of Object.entries(schema)) {
-      if (typeof value === 'object' && value !== null && (value as Record<string, unknown>).type === 'array') {
+      if (
+        typeof value === 'object' &&
+        value !== null &&
+        (value as Record<string, unknown>).type === 'array'
+      ) {
         const itemType = (value as Record<string, unknown>).itemType;
-        const subSchema = typeof itemType === 'object' && itemType !== null ? itemType as Record<string, unknown> : {};
-        result[key] = Array.from({ length: count }, (_, i) => this.generateFromSchema(subSchema, count, i));
+        const subSchema =
+          typeof itemType === 'object' && itemType !== null
+            ? (itemType as Record<string, unknown>)
+            : {};
+        result[key] = Array.from({ length: count }, (_, i) =>
+          this.generateFromSchema(subSchema, count, i),
+        );
       } else if (value === 'id') {
         result[key] = (index ?? 0) + 1;
       } else if (typeof value === 'string') {
@@ -127,19 +167,32 @@ export class MockController {
 
   private generateValue(type: string): unknown {
     switch (type) {
-      case 'string': return faker.lorem.word();
-      case 'number': return faker.number.int();
-      case 'boolean': return faker.datatype.boolean();
-      case 'uuid': return faker.string.uuid();
-      case 'email': return faker.internet.email();
-      case 'firstName': return faker.person.firstName();
-      case 'lastName': return faker.person.lastName();
-      case 'age': return faker.number.int({ min: 18, max: 65 });
-      case 'name': return faker.person.fullName();
-      case 'city': return faker.location.city();
-      case 'phone': return faker.phone.number();
-      case 'date': return faker.date.recent().toISOString();
-      default: return faker.lorem.word();
+      case 'string':
+        return faker.lorem.word();
+      case 'number':
+        return faker.number.int();
+      case 'boolean':
+        return faker.datatype.boolean();
+      case 'uuid':
+        return faker.string.uuid();
+      case 'email':
+        return faker.internet.email();
+      case 'firstName':
+        return faker.person.firstName();
+      case 'lastName':
+        return faker.person.lastName();
+      case 'age':
+        return faker.number.int({ min: 18, max: 65 });
+      case 'name':
+        return faker.person.fullName();
+      case 'city':
+        return faker.location.city();
+      case 'phone':
+        return faker.phone.number();
+      case 'date':
+        return faker.date.recent().toISOString();
+      default:
+        return faker.lorem.word();
     }
   }
 }

@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 
-interface PanelInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+type PanelInputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 export const PanelInput = forwardRef<HTMLInputElement, PanelInputProps>(
   ({ className = '', ...props }, ref) => {

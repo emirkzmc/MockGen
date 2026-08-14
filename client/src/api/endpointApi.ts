@@ -8,9 +8,9 @@ import type {
   CreateEndpointPayload,
 } from '../domain/endpointDomains';
 
-export async function getEndpoints(params?: EndpointSearchParams): Promise<EndpointSearchListResponse> {
+export async function getEndpoints(params?: Record<string, unknown>): Promise<EndpointSearchListResponse> {
   const response = await apiClient.get<EndpointSearchListResponse>(
-    buildSearchPath(EndpointApiMethod.SEARCH, params as Record<string, any>),
+    buildSearchPath(EndpointApiMethod.SEARCH, params),
   );
   return response.data;
 }

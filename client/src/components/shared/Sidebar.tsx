@@ -36,12 +36,13 @@ export function Sidebar({ items, isOpen, setIsOpen }: SidebarProps) {
         }).join(''));
         const payload = JSON.parse(jsonPayload);
         if (payload.fullName) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setUserName(payload.fullName);
         } else if (payload.email) {
           setUserName(payload.email);
         }
-      } catch (e) {
-        console.error("Failed to parse token");
+      } catch {
+        // Ignore errors
       }
     }
   }, []);

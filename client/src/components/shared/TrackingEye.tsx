@@ -60,7 +60,7 @@ export const TrackingEye = () => {
         />
 
         <motion.div 
-          className="w-[300px] h-[300px] lg:w-[400px] lg:h-[400px] rounded-full flex items-center justify-center absolute shadow-2xl"
+          className="w-75 h-75 lg:w-100 lg:h-100 rounded-full flex items-center justify-center absolute shadow-2xl"
           style={{
             x: irisX, 
             y: irisY,
@@ -69,7 +69,7 @@ export const TrackingEye = () => {
           }}
         >
           <motion.div 
-            className="w-[120px] h-[120px] lg:w-[160px] lg:h-[160px] rounded-full absolute"
+            className="w-30 h-30 lg:w-40 lg:h-40 rounded-full absolute"
             style={{
               x: pupilX, 
               y: pupilY,
@@ -78,7 +78,7 @@ export const TrackingEye = () => {
             }}
           >
             <motion.div
-              className="w-[30px] h-[30px] lg:w-[40px] lg:h-[40px] rounded-full bg-white opacity-80 absolute top-4 left-4"
+              className="w-7.5 h-7.5 lg:w-10 lg:h-10 rounded-full bg-white opacity-80 absolute top-4 left-4"
               style={{
                 x: shineX,
                 y: shineY,
@@ -87,7 +87,7 @@ export const TrackingEye = () => {
               }}
             />
             <motion.div
-              className="w-[10px] h-[10px] lg:w-[15px] lg:h-[15px] rounded-full bg-white opacity-40 absolute top-12 left-14"
+              className="w-2.5 h-2.5 lg:w-[15px] lg:h-[15px] rounded-full bg-white opacity-40 absolute top-12 left-14"
               style={{
                 x: shineX,
                 y: shineY,

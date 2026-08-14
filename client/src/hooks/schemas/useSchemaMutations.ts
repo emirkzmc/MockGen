@@ -20,8 +20,9 @@ export function useCreateSchemaMutation() {
       toast.success('Schema created successfully');
       invalidate();
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to create schema');
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || 'Failed to create schema');
     },
   });
 }
@@ -32,12 +33,13 @@ export function useUpdateSchemaMutation() {
   return useMutation({
     mutationFn: ({ id, payload }: { id: string; payload: CreateSchemaPayload }) =>
       updateSchema(id, payload),
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       toast.success('Schema updated successfully');
       invalidate();
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to update schema');
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || 'Failed to update schema');
     },
   });
 }
@@ -51,8 +53,9 @@ export function useDeleteSchemaMutation() {
       toast.success('Schema deleted successfully');
       invalidate();
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to delete schema');
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || 'Failed to delete schema');
     },
   });
 }

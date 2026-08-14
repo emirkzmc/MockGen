@@ -25,13 +25,14 @@ export default function SettingsPage() {
         }).join(''));
         const payload = JSON.parse(jsonPayload);
         if (payload.fullName) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setUserName(payload.fullName);
         }
         if (payload.email) {
           setUserEmail(payload.email);
         }
-      } catch (e) {
-        console.error("Failed to parse token");
+      } catch {
+        // Ignore decoding errors
       }
     }
   }, []);

@@ -23,7 +23,7 @@ export interface CreateEndpointPayload {
   count: number;
 }
 
-export interface EndpointSearchParams extends Record<string, any> {
+export interface EndpointSearchParams extends Record<string, unknown> {
   search?: string;
 }
 

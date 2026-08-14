@@ -75,8 +75,8 @@ export default function RegisterPage() {
       </div>
       <div className="w-full md:w-1/2 flex flex-col justify-end md:justify-center items-center md:items-end p-8 md:pr-16 z-10 pointer-events-none mt-12 md:mt-0">
         <div className="flex flex-col items-center md:items-end text-white text-center md:text-right uppercase">
-          <h2 className="text-2xl sm:text-3xl md:text-[48px] font-bold leading-tight">THE MOCK DATA GENERATOR</h2>
-          <h2 className="text-2xl sm:text-3xl md:text-[48px] font-bold leading-tight">HERE IT IS</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight">THE MOCK DATA GENERATOR</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight">HERE IT IS</h2>
           <div className="mt-2 md:mt-0 scale-75 md:scale-100 origin-center md:origin-right">
             <AnimatedLabel />
           </div>

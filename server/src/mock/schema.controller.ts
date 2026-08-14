@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Inject } from '@nestjs/common';
 import type { IStorage } from '../core/contracts/storage.interface';
@@ -43,7 +54,10 @@ export class SchemaController {
     const user = req.user ?? {};
     const userId = typeof user.userId === 'string' ? user.userId : '';
     const name = typeof body.name === 'string' ? body.name : '';
-    const schema = typeof body.schema === 'object' && body.schema !== null ? (body.schema as Record<string, unknown>) : {};
+    const schema =
+      typeof body.schema === 'object' && body.schema !== null
+        ? (body.schema as Record<string, unknown>)
+        : {};
 
     return this.storage.createSchema(userId, name, schema);
   }
@@ -58,7 +72,10 @@ export class SchemaController {
     const user = req.user ?? {};
     const userId = typeof user.userId === 'string' ? user.userId : '';
     const name = typeof body.name === 'string' ? body.name : '';
-    const schema = typeof body.schema === 'object' && body.schema !== null ? (body.schema as Record<string, unknown>) : {};
+    const schema =
+      typeof body.schema === 'object' && body.schema !== null
+        ? (body.schema as Record<string, unknown>)
+        : {};
 
     return this.storage.updateSchema(id, userId, name, schema);
   }

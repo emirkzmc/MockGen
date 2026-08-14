@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+
 import { Spinner } from "@/components/ui/Spinner";
 import { PanelButton } from "@/components/ui/PanelButton";
 import { useGetEndpoints, useGetLogs } from "@/hooks/endpoints/useEndpoint";
