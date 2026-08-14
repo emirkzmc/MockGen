@@ -94,8 +94,8 @@ export default function LoginPage() {
             ))}
             
             <div className="mt-2">
-              <Button type="submit" disabled={loginMutation.isPending}>
-                {loginMutation.isPending ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
+              <Button type="submit" isLoading={loginMutation.isPending}>
+                Giriş Yap
               </Button>
             </div>
 

@@ -2,7 +2,8 @@
 
 import { useGetSchemas } from "@/hooks/schemas/useSchema";
 import { useDeleteSchemaMutation } from "@/hooks/schemas/useSchemaMutations";
-import { Plus, Edit, Trash2, Loader2, AlertCircle, Database } from "lucide-react";
+import { Plus, Edit, Trash2, AlertCircle, Database } from "lucide-react";
+import { Spinner } from "@/components/ui/Spinner";
 import { PanelButton } from "@/components/ui/PanelButton";
 import { PanelIconButton } from "@/components/ui/PanelIconButton";
 import toast from "react-hot-toast";
@@ -35,7 +36,7 @@ export default function SchemasPage() {
       <div className="pt-4">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20 text-black/50 dark:text-white/50">
-            <Loader2 className="w-8 h-8 animate-spin mb-4" />
+            <Spinner size="lg" className="mb-4" />
             <p className="font-light tracking-wide">Loading schemas...</p>
           </div>
         ) : error ? (

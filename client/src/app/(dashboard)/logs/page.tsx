@@ -1,7 +1,8 @@
 "use client";
 
 import { useGetLogs } from "@/hooks/endpoints/useEndpoint";
-import { Loader2, AlertCircle, ChevronDown, ChevronRight } from "lucide-react";
+import { AlertCircle, ChevronDown, ChevronRight } from "lucide-react";
+import { Spinner } from "@/components/ui/Spinner";
 import { useState } from "react";
 
 export default function LogsPage() {
@@ -11,7 +12,7 @@ export default function LogsPage() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-black/50 dark:text-white/50">
-        <Loader2 className="w-8 h-8 animate-spin mb-4" />
+        <Spinner size="lg" className="mb-4" />
         <p className="font-light tracking-wide">Loading logs...</p>
       </div>
     );

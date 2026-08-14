@@ -1,6 +1,8 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { Spinner } from "@/components/ui/Spinner";
 import { PanelButton } from "@/components/ui/PanelButton";
 import { useGetEndpoints, useGetLogs } from "@/hooks/endpoints/useEndpoint";
 
@@ -42,7 +44,10 @@ export default function DashboardPage() {
         <h2 className="text-xs text-black/40 dark:text-white/30 uppercase tracking-widest mb-8">Recent Requests</h2>
         <div className="overflow-x-auto">
           {isLoadingLogs ? (
-            <div className="text-black/50 dark:text-white/50 text-sm">Loading logs...</div>
+            <div className="flex items-center gap-2 text-black/50 dark:text-white/50 text-sm">
+              <Spinner size="sm" />
+              Loading logs...
+            </div>
           ) : recentLogs.length === 0 ? (
             <div className="text-black/50 dark:text-white/50 text-sm italic">No recent requests.</div>
           ) : (

@@ -4,7 +4,8 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGetSchema } from "@/hooks/schemas/useSchema";
 import { useCreateSchemaMutation, useUpdateSchemaMutation } from "@/hooks/schemas/useSchemaMutations";
-import { Save, Plus, Trash2, ArrowLeft, RefreshCw } from "lucide-react";
+import { Save, Plus, Trash2, ArrowLeft, Settings, ArrowRight } from "lucide-react";
+import { Spinner } from "@/components/ui/Spinner";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { PanelInput } from "@/components/ui/PanelInput";
@@ -255,7 +256,7 @@ function SchemaEditorContent() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50">
-        <RefreshCw className="w-8 h-8 animate-spin mb-4" />
+        <Spinner size="lg" className="mb-4" />
         <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
     );
@@ -276,7 +277,7 @@ function SchemaEditorContent() {
         <PanelButton
           onClick={handleSave}
           disabled={isSaving}
-          icon={isSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          icon={isSaving ? <Spinner size="sm" /> : <Save className="w-4 h-4" />}
         >
           {isSaving ? "Saving..." : "Save Schema"}
         </PanelButton>

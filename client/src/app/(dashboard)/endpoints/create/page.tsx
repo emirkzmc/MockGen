@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useGetEndpoint } from "@/hooks/endpoints/useEndpoint";
 import { useCreateEndpointMutation, useUpdateEndpointMutation } from "@/hooks/endpoints/useEndpointMutations";
 import { useGetSchemas } from "@/hooks/schemas/useSchema";
-import { Save, ArrowLeft, RefreshCw, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Save, Plus, Trash2, Edit } from "lucide-react";
+import { Spinner } from "@/components/ui/Spinner";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { PanelInput } from "@/components/ui/PanelInput";
@@ -98,7 +99,7 @@ function EndpointEditorContent() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50 py-20">
-        <RefreshCw className="w-8 h-8 animate-spin mb-4" />
+        <Spinner size="lg" className="mb-4" />
         <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
     );
@@ -119,7 +120,7 @@ function EndpointEditorContent() {
         <PanelButton
           onClick={handleSave}
           disabled={isSaving}
-          icon={isSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          icon={isSaving ? <Spinner size="sm" /> : <Save className="w-4 h-4" />}
         >
           {isSaving ? "Saving..." : "Save Endpoint"}
         </PanelButton>

@@ -56,8 +56,8 @@ export default function RegisterPage() {
               />
             ))}
             
-            <Button type="submit" disabled={registerMutation.isPending}>
-              {registerMutation.isPending ? 'Kaydediliyor...' : 'Kayıt Ol'}
+            <Button type="submit" isLoading={registerMutation.isPending}>
+              Kayıt Ol
             </Button>
             
             <p className="text-center mt-2 text-sm text-gray-300">
