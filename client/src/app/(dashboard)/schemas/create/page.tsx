@@ -4,7 +4,8 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGetSchema } from "@/hooks/schemas/useSchema";
 import { useCreateSchemaMutation, useUpdateSchemaMutation } from "@/hooks/schemas/useSchemaMutations";
-import { Save, Plus, Trash2, ArrowLeft, RefreshCw } from "lucide-react";
+import { Save, Plus, Trash2, ArrowLeft, Settings, ArrowRight } from "lucide-react";
+import { Spinner } from "@/components/ui/Spinner";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { PanelInput } from "@/components/ui/PanelInput";
@@ -16,7 +17,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import axios from "axios";
 import { SchemaField } from "@/domain/schemaDomains";
 
-function FieldRow({ field, updateField, removeField, addSubField, depth = 0 }: { field: SchemaField, updateField: any, removeField: any, addSubField: any, depth?: number }) {
+function FieldRow({ field, updateField, removeField, addSubField, depth = 0 }: { field: SchemaField, updateField: (id: string, key: keyof SchemaField, value: string | SchemaField[]) => void, removeField: (id: string) => void, addSubField: (parentId: string) => void, depth?: number }) {
   return (
     <div className="flex flex-col space-y-3 relative">
       {depth > 0 && (
@@ -25,8 +26,8 @@ function FieldRow({ field, updateField, removeField, addSubField, depth = 0 }: {
           <div className="absolute -left-5 bottom-5 w-4 h-px bg-black/10 dark:bg-white/10" />
         </>
       )}
-      <div className="flex items-end space-x-6 group">
-        <div className="flex-1">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end space-y-4 sm:space-y-0 sm:space-x-6 group w-full">
+        <div className="flex-1 w-full">
           {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Field Name</label>}
           <PanelInput
             type="text"
@@ -36,7 +37,7 @@ function FieldRow({ field, updateField, removeField, addSubField, depth = 0 }: {
             className="px-2 py-2 text-sm font-mono border-black/20 dark:border-white/10"
           />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 w-full">
           {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Type</label>}
           <PanelSelect
             value={field.type}
@@ -117,16 +118,17 @@ function SchemaEditorContent() {
 
   useEffect(() => {
     if (existingSchema) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setName(existingSchema.name);
       
       const parseSchemaFields = (schemaObj: Record<string, unknown>): SchemaField[] => {
         return Object.entries(schemaObj).map(([fieldName, typeDef], index) => {
-          if (typeof typeDef === 'object' && typeDef !== null && (typeDef as any).type === 'array') {
+          if (typeof typeDef === 'object' && typeDef !== null && (typeDef as Record<string, unknown>).type === 'array') {
             return {
               id: Date.now().toString() + index,
               name: fieldName,
               type: 'array' as SchemaField["type"],
-              subFields: parseSchemaFields((typeDef as any).itemType || {}),
+              subFields: parseSchemaFields(((typeDef as Record<string, unknown>).itemType as Record<string, unknown>) || {}),
             };
           }
           return {
@@ -255,7 +257,7 @@ function SchemaEditorContent() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50">
-        <RefreshCw className="w-8 h-8 animate-spin mb-4" />
+        <Spinner size="lg" className="mb-4" />
         <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
     );
@@ -263,7 +265,7 @@ function SchemaEditorContent() {
 
   return (
     <div className="space-y-12 w-full">
-      <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0 border-b border-black/10 dark:border-white/10 pb-8">
         <div className="flex items-center space-x-6">
           <Link href="/schemas" className="text-black/60 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors">
             <ArrowLeft className="w-5 h-5" />
@@ -276,7 +278,7 @@ function SchemaEditorContent() {
         <PanelButton
           onClick={handleSave}
           disabled={isSaving}
-          icon={isSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          icon={isSaving ? <Spinner size="sm" /> : <Save className="w-4 h-4" />}
         >
           {isSaving ? "Saving..." : "Save Schema"}
         </PanelButton>
@@ -331,7 +333,7 @@ function SchemaEditorContent() {
             <div className="bg-black/5 dark:bg-white/2 border border-black/10 dark:border-white/5 rounded-xl p-6 font-mono text-sm text-black/80 dark:text-white/70 min-h-100 overflow-auto relative">
               {isPreviewFetching && (
                 <div className="absolute top-2 right-4 text-xs flex items-center space-x-2 text-black/40 dark:text-white/30">
-                  <RefreshCw className="w-3 h-3 animate-spin" />
+                  <Spinner className="w-5 h-5 text-white/50" />
                   <span>Updating...</span>
                 </div>
               )}
@@ -350,7 +352,7 @@ export default function SchemaEditorPage() {
   return (
     <Suspense fallback={
       <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50 py-20">
-        <RefreshCw className="w-8 h-8 animate-spin mb-4" />
+        <Spinner className="w-8 h-8 text-black/50 mb-4" />
         <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
     }>

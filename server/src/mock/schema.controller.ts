@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Inject } from '@nestjs/common';
 import type { IStorage } from '../core/contracts/storage.interface';
@@ -10,7 +21,7 @@ export class SchemaController {
   constructor(@Inject(STORAGE_TOKEN) private readonly storage: IStorage) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get('search')
   async getSchemas(
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
   ): Promise<Record<string, unknown>[]> {
@@ -35,7 +46,7 @@ export class SchemaController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post()
+  @Post('create')
   async createSchema(
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
     @Body() body: Record<string, unknown>,
@@ -43,13 +54,16 @@ export class SchemaController {
     const user = req.user ?? {};
     const userId = typeof user.userId === 'string' ? user.userId : '';
     const name = typeof body.name === 'string' ? body.name : '';
-    const schema = typeof body.schema === 'object' && body.schema !== null ? (body.schema as Record<string, unknown>) : {};
+    const schema =
+      typeof body.schema === 'object' && body.schema !== null
+        ? (body.schema as Record<string, unknown>)
+        : {};
 
     return this.storage.createSchema(userId, name, schema);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put(':id')
+  @Put('update/:id')
   async updateSchema(
     @Param('id') id: string,
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },
@@ -58,13 +72,16 @@ export class SchemaController {
     const user = req.user ?? {};
     const userId = typeof user.userId === 'string' ? user.userId : '';
     const name = typeof body.name === 'string' ? body.name : '';
-    const schema = typeof body.schema === 'object' && body.schema !== null ? (body.schema as Record<string, unknown>) : {};
+    const schema =
+      typeof body.schema === 'object' && body.schema !== null
+        ? (body.schema as Record<string, unknown>)
+        : {};
 
     return this.storage.updateSchema(id, userId, name, schema);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
+  @Delete('delete/:id')
   async deleteSchema(
     @Param('id') id: string,
     @Request() req: ExpressRequest & { user?: Record<string, unknown> },

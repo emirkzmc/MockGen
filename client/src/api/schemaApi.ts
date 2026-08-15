@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import apiClient from '../lib/apiClient';
 import { SchemaApiMethod } from '../constants/MethodNames';
 import { buildSearchPath } from '../helpers/buildSearchPath';
 import type {
@@ -8,9 +8,9 @@ import type {
   CreateSchemaPayload,
 } from '../domain/schemaDomains';
 
-export async function getSchemas(params?: SchemaSearchParams): Promise<SchemaSearchListResponse> {
+export async function getSchemas(params?: Record<string, unknown>): Promise<SchemaSearchListResponse> {
   const response = await apiClient.get<SchemaSearchListResponse>(
-    buildSearchPath(SchemaApiMethod.SEARCH, params as Record<string, any>),
+    buildSearchPath(SchemaApiMethod.SEARCH, params),
   );
   return response.data;
 }

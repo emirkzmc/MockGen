@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 export function useLoginMutation(
   onSuccessCallback?: () => void,
-  onErrorCallback?: (error: any) => void
+  onErrorCallback?: (error: unknown) => void
 ) {
   return useMutation({
     mutationFn: loginUser,

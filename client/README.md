@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MockGen - Client (Frontend)
 
-## Getting Started
+Bu proje MockGen uygulamasının frontend (istemci) tarafını oluşturur. Modern React ve Next.js pratikleri kullanılarak geliştirilmiştir.
 
-First, run the development server:
+## 🛠 Teknoloji Yığını (Tech Stack)
+
+- **Framework:** [Next.js](https://nextjs.org/) (App Router)
+- **UI Kütüphanesi:** [React 19](https://react.dev/)
+- **Stil & Tasarım:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **Veri Çekme (Data Fetching):** [TanStack React Query](https://tanstack.com/query/latest) & [Axios](https://axios-http.com/)
+- **Animasyonlar:** [Framer Motion](https://www.framer.com/motion/)
+- **İkonlar:** [Lucide React](https://lucide.dev/)
+- **Sahte Veri (Mocking):** [@faker-js/faker](https://fakerjs.dev/)
+
+##  Başlangıç
+
+Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyin.
+
+### Ön Koşullar
+
+- Node.js (v20 veya üzeri önerilir)
+- npm veya yarn/pnpm
+
+### Kurulum
+
+1. Bağımlılıkları yükleyin:
+```bash
+npm install
+```
+
+2. Ortam değişkenlerini ayarlayın:
+`.env.example` dosyasını kopyalayarak `.env` veya `.env.local` dosyası oluşturun ve gerekli değişkenleri doldurun.
+
+```bash
+cp .env.example .env.local
+```
+
+### Geliştirme Sunucusunu Başlatma
+
+Aşağıdaki komutla projeyi geliştirme modunda başlatabilirsiniz:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Uygulama [http://localhost:3000](http://localhost:3000) adresinde çalışmaya başlayacaktır.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+##  Proje Yapısı
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Proje genel olarak feature-sliced veya standart Next.js App Router yapısını takip eder. Lütfen projenin ana dizinindeki `AGENTS.md` (Codex Engineering Rules) dosyasını okuduğunuzdan emin olun. Tüm mimari kararlar bu kurallara göre alınmalıdır.
 
-## Learn More
+- `src/app`: Sayfalar ve route tanımlamaları.
+- `src/components`: Yeniden kullanılabilir UI bileşenleri.
+- `src/api`: Axios interceptorları ve API çağrı fonksiyonları.
+- `src/hooks`: Custom React hook'ları.
+- `src/types`: TypeScript arayüzleri ve tipleri.
 
-To learn more about Next.js, take a look at the following resources:
+##  Mimari ve Kod Standartları Kuralları
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Bu projede **SOLID prensipleri**, **Atomic Design** ve **Feature-Sliced Design** prensipleri benimsenmektedir:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Bileşenler tek bir sorumluluğa sahip olmalı (Single Responsibility).
+- API çağrıları doğrudan bileşenlerden (`fetch` veya `axios` ile) yapılmamalı, `src/api` katmanına aktarılmalı ve Hook'lar (`useQuery` vs.) aracılığıyla kullanılmalıdır.
+- Tailwind CSS ile stil yazarken tutarlı utility class'lar kullanın.
+- Ayrıntılı geliştirici kuralları için ana dizindeki `AGENTS.md` dosyasına başvurun.
 
-## Deploy on Vercel
+##  Kullanılabilir Scriptler
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev`: Geliştirme sunucusunu başlatır.
+- `npm run build`: Projeyi production için derler.
+- `npm run start`: Derlenmiş projeyi production modunda başlatır.
+- `npm run lint`: ESLint ile kod analizini çalıştırır.

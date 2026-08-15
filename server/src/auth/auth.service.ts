@@ -5,6 +5,13 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { Pool } from 'pg';
+
+interface UserRow {
+  id: string | number;
+  email: string;
+  password?: string;
+  full_name?: string | null;
+}
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { PG_POOL_TOKEN } from '../core/contracts/storage.interface';
@@ -28,7 +35,7 @@ export class AuthService {
     const nameToSave = typeof fullName === 'string' ? fullName : null;
 
     const checkQuery = `SELECT id FROM users WHERE email = $1 LIMIT 1`;
-    const checkResult = await this.pool.query(checkQuery, [email]);
+    const checkResult = await this.pool.query<UserRow>(checkQuery, [email]);
 
     if (checkResult.rows.length > 0) {
       throw new ConflictException();
@@ -42,10 +49,14 @@ export class AuthService {
       VALUES ($1, $2, $3)
       RETURNING id, email, full_name
     `;
-    const result = await this.pool.query(insertQuery, [email, hashedPassword, nameToSave]);
-    const user: unknown = result.rows[0];
+    const result = await this.pool.query<UserRow>(insertQuery, [
+      email,
+      hashedPassword,
+      nameToSave,
+    ]);
+    const user = result.rows[0];
 
-    return user as Record<string, unknown>;
+    return user as unknown as Record<string, unknown>;
   }
 
   async login(
@@ -57,7 +68,7 @@ export class AuthService {
     }
 
     const query = `SELECT id, password, full_name FROM users WHERE email = $1 LIMIT 1`;
-    const result = await this.pool.query(query, [email]);
+    const result = await this.pool.query<UserRow>(query, [email]);
 
     if (result.rows.length === 0) {
       throw new UnauthorizedException();
@@ -80,10 +91,10 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload = { 
-      sub: userIdRaw, 
-      email, 
-      fullName: user.full_name || email 
+    const payload = {
+      sub: userIdRaw,
+      email,
+      fullName: user.full_name || email,
     };
 
     return {

@@ -4,25 +4,23 @@ export enum AuthApiMethod {
 }
 
 export enum SchemaApiMethod {
-  SEARCH = '/schemas',
+  SEARCH = '/schemas/search',
   DETAIL = '/schemas',
-  CREATE = '/schemas',
-  UPDATE = '/schemas',
-  DELETE = '/schemas',
+  CREATE = '/schemas/create',
+  UPDATE = '/schemas/update',
+  DELETE = '/schemas/delete',
 }
 
 export enum EndpointApiMethod {
-  SEARCH = '/mock/endpoints',
+  SEARCH = '/mock/endpoints/search',
   DETAIL = '/mock/endpoints',
-  CREATE = '/mock/endpoints',
-  UPDATE = '/mock/endpoints',
-  DELETE = '/mock/endpoints',
+  CREATE = '/mock/endpoints/create',
+  UPDATE = '/mock/endpoints/update',
+  DELETE = '/mock/endpoints/delete',
 }
 
 export enum LogApiMethod {
-  SEARCH = '/mock/logs',
-  DETAIL = '/mock/logs',
-  CREATE = '/mock/logs',
-  UPDATE = '/mock/logs',
-  DELETE = '/mock/logs',
+  SEARCH = '/mock/logs/search',
+  CREATE = '/mock/logs/create',
+  DELETE = '/mock/logs/delete',
 }

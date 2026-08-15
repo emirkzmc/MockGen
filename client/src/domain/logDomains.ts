@@ -7,7 +7,7 @@ export interface LogData {
   timestamp: string;
 }
 
-export interface LogSearchParams extends Record<string, any> {
+export interface LogSearchParams extends Record<string, unknown> {
   search?: string;
 }
 

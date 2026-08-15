@@ -32,9 +32,9 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#260F09] overflow-hidden relative">
-      <div className="w-1/2 flex flex-col items-center justify-center p-8 z-10">
-        <div className="w-86.25">
+    <div className="min-h-screen flex flex-col-reverse md:flex-row bg-[#260F09] overflow-hidden relative">
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-4 md:p-8 z-10">
+        <div className="w-full max-w-sm md:w-86.25">
           <motion.form 
             onSubmit={handleRegister}
             initial={{ opacity: 0, y: 15 }}
@@ -56,8 +56,8 @@ export default function RegisterPage() {
               />
             ))}
             
-            <Button type="submit" disabled={registerMutation.isPending}>
-              {registerMutation.isPending ? 'Kaydediliyor...' : 'Kayıt Ol'}
+            <Button type="submit" isLoading={registerMutation.isPending}>
+              Kayıt Ol
             </Button>
             
             <p className="text-center mt-2 text-sm text-gray-300">
@@ -73,11 +73,13 @@ export default function RegisterPage() {
           </motion.form>
         </div>
       </div>
-      <div className="w-1/2 flex flex-col justify-center items-end pr-16 z-10 pointer-events-none">
-        <div className="flex flex-col items-end text-white text-right uppercase">
-          <h2 className="text-[48px] font-bold leading-tight">THE MOCK DATA GENERATOR</h2>
-          <h2 className="text-[48px] font-bold leading-tight">HERE IT IS</h2>
-          <AnimatedLabel />
+      <div className="w-full md:w-1/2 flex flex-col justify-end md:justify-center items-center md:items-end p-8 md:pr-16 z-10 pointer-events-none mt-12 md:mt-0">
+        <div className="flex flex-col items-center md:items-end text-white text-center md:text-right uppercase">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight">THE MOCK DATA GENERATOR</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight">HERE IT IS</h2>
+          <div className="mt-2 md:mt-0 scale-75 md:scale-100 origin-center md:origin-right">
+            <AnimatedLabel />
+          </div>
         </div>
       </div>
       <AuthBgComponents />

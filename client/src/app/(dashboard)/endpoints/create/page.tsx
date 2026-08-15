@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useGetEndpoint } from "@/hooks/endpoints/useEndpoint";
 import { useCreateEndpointMutation, useUpdateEndpointMutation } from "@/hooks/endpoints/useEndpointMutations";
 import { useGetSchemas } from "@/hooks/schemas/useSchema";
-import { Save, ArrowLeft, RefreshCw, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Save, Plus, Trash2, Edit } from "lucide-react";
+import { Spinner } from "@/components/ui/Spinner";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { PanelInput } from "@/components/ui/PanelInput";
@@ -32,6 +33,7 @@ function EndpointEditorContent() {
 
   useEffect(() => {
     if (existingEndpoint) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPath(existingEndpoint.path);
       setMethod(existingEndpoint.method);
       setCount(existingEndpoint.count || 5);
@@ -46,6 +48,7 @@ function EndpointEditorContent() {
     if (!editId && schemas && schemas.length > 0 && responses.length === 1 && responses[0].schemaId === "") {
       const newResponses = [...responses];
       newResponses[0].schemaId = schemas[0].id;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setResponses(newResponses);
     }
   }, [schemas, editId, responses]);
@@ -98,7 +101,7 @@ function EndpointEditorContent() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50 py-20">
-        <RefreshCw className="w-8 h-8 animate-spin mb-4" />
+        <Spinner size="lg" className="mb-4" />
         <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
     );
@@ -106,7 +109,7 @@ function EndpointEditorContent() {
 
   return (
     <div className="space-y-12 w-full">
-      <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0 border-b border-black/10 dark:border-white/10 pb-8">
         <div className="flex items-center space-x-6">
           <Link href="/endpoints" className="text-black/60 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors">
             <ArrowLeft className="w-5 h-5" />
@@ -119,7 +122,7 @@ function EndpointEditorContent() {
         <PanelButton
           onClick={handleSave}
           disabled={isSaving}
-          icon={isSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          icon={isSaving ? <Spinner size="sm" /> : <Save className="w-4 h-4" />}
         >
           {isSaving ? "Saving..." : "Save Endpoint"}
         </PanelButton>
@@ -200,8 +203,8 @@ function EndpointEditorContent() {
 
         <div className="space-y-4">
           {responses.map((resp, index) => (
-            <div key={index} className="flex items-center space-x-4 bg-black/5 dark:bg-white/5 p-4 rounded-lg">
-              <div className="w-1/3">
+            <div key={index} className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 bg-black/5 dark:bg-white/5 p-4 rounded-lg">
+              <div className="w-full sm:w-1/3">
                 <label className="block text-[10px] text-black/50 dark:text-white/40 uppercase tracking-widest mb-2">Status Code</label>
                 <PanelSelect
                   value={resp.statusCode.toString()}
@@ -223,7 +226,7 @@ function EndpointEditorContent() {
                   className="w-full"
                 />
               </div>
-              <div className="w-2/3">
+              <div className="w-full sm:w-2/3">
                 <label className="block text-[10px] text-black/50 dark:text-white/40 uppercase tracking-widest mb-2">Response Schema</label>
                 <div className="flex items-center space-x-4">
                   <PanelSelect
@@ -234,7 +237,7 @@ function EndpointEditorContent() {
                       setResponses(newResponses);
                     }}
                     options={schemas?.map(s => ({ label: s.name, value: s.id })) || []}
-                    className="w-full flex-grow"
+                    className="w-full grow"
                   />
                   {responses.length > 1 && (
                     <button 
@@ -263,7 +266,7 @@ export default function EndpointEditorPage() {
   return (
     <Suspense fallback={
       <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50 py-20">
-        <RefreshCw className="w-8 h-8 animate-spin mb-4" />
+        <Spinner className="w-5 h-5 text-white/50" />
         <p className="font-light tracking-wide">Loading Editor...</p>
       </div>
     }>

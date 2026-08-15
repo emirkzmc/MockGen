@@ -19,8 +19,10 @@ apiClient.interceptors.response.use(
   (res) => res,
   (error) => {
     if (error.response?.status === 401 && typeof window !== 'undefined') {
-      localStorage.removeItem('authToken');
-      window.location.href = '/login';
+      if (error.config?.url && !error.config.url.includes('/login')) {
+        localStorage.removeItem('authToken');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

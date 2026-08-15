@@ -5,7 +5,7 @@ import { queryKeys } from '@/constants/queryKeys';
 export function useGetSchemas() {
   return useQuery({
     queryKey: queryKeys.schemas.list(),
-    queryFn: getSchemas,
+    queryFn: () => getSchemas(),
   });
 }
 

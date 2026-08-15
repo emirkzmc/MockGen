@@ -18,19 +18,21 @@ export default function SettingsPage() {
     if (token) {
       try {
         const base64Url = token.split('.')[1];
+        if (!base64Url) throw new Error("Invalid token format");
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
         const payload = JSON.parse(jsonPayload);
         if (payload.fullName) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setUserName(payload.fullName);
         }
         if (payload.email) {
           setUserEmail(payload.email);
         }
-      } catch (e) {
-        console.error("Failed to parse token");
+      } catch {
+        // Ignore decoding errors
       }
     }
   }, []);
@@ -50,7 +52,7 @@ export default function SettingsPage() {
       <div className="space-y-12">
         <div>
           <h2 className="text-xs text-black/40 dark:text-white/30 uppercase tracking-widest border-b border-black/10 dark:border-white/5 pb-4 mb-8">Appearance</h2>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
             <div>
               <label className="block text-sm font-medium text-black/80 dark:text-white/80 mb-1">Theme</label>
               <p className="text-xs text-black/50 dark:text-white/40 font-light">Select your preferred color theme.</p>
@@ -112,12 +114,12 @@ export default function SettingsPage() {
             </p>
             <div>
               <label className="block text-xs text-black/50 dark:text-white/40 uppercase tracking-widest mb-3">Global API Key</label>
-              <div className="flex space-x-6 items-end">
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 items-start sm:items-end w-full">
                 <PanelInput
                   type="text"
                   readOnly
                   value="mk_live_9f8d7c6b5a41234567890abcdef"
-                  className="font-mono text-black/80 dark:text-white/70"
+                  className="font-mono text-black/80 dark:text-white/70 w-full md:w-auto"
                 />
                 <PanelButton
                   type="button"
