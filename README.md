@@ -1,6 +1,6 @@
 # MockGen
 
-> Backend kodu yazmadan saniyeler içinde dinamik mock API endpoint'leri oluşturun.
+> Build dynamic mock API endpoints in seconds — no backend code required.
 
 🔗 **[Canlı Demo](https://mockgen.com.tr)**
 
@@ -13,7 +13,7 @@
 
 ## Why MockGen
 
-Frontend geliştirirken backend henüz hazır olmadığında ya elle sahte JSON verisi yazılır ya da `json-server` gibi araçlarla geçici çözümler kurulur. MockGen, veri modelini (schema) bir kez tanımlayıp bunu istediğiniz kadar endpoint'e bağlamanıza, gerçekçi mock veriyi otomatik üretmenize ve gerçek zamanlı önizlemenize olanak tanır — hiç backend kodu yazmadan.
+When the backend isn't ready yet, frontend developers usually end up hand-writing fake JSON or wiring up temporary fixes with tools like `json-server`. MockGen lets you define a data model once, attach it to as many endpoints as you need, and get realistic mock data with live preview — without writing a single line of backend code.
 
 MockGen is a modular platform for creating and managing mock API endpoints and data schemas. It allows developers to quickly generate dynamic RESTful APIs without writing any backend code, making it a practical tool for frontend development, testing, and prototyping.
 
