@@ -2,7 +2,7 @@
 
 > Build dynamic mock API endpoints in seconds — no backend code required.
 
-🔗 **[Canlı Demo](https://mockgen.com.tr)**
+🔗 **[Live Demo](https://mockgen.com.tr)**
 
 [![Demo](https://img.shields.io/badge/demo-live-black?labelColor=810100)](https://mockgen.com.tr)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org)
