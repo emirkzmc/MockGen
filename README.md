@@ -1,18 +1,33 @@
 # MockGen
 
-MockGen is an enterprise-grade, highly modular SaaS platform designed for creating and managing mock API endpoints and data schemas. It allows developers to quickly generate dynamic RESTful APIs without writing any backend code, making it the perfect tool for frontend development, testing, and prototyping.
+> Backend kodu yazmadan saniyeler içinde dinamik mock API endpoint'leri oluşturun.
 
-##  Features
+🔗 **[Canlı Demo](https://mockgen.com.tr)**
+
+[![Demo](https://img.shields.io/badge/demo-live-black?labelColor=810100)](https://mockgen.com.tr)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org)
+[![NestJS](https://img.shields.io/badge/NestJS-black?logo=nestjs&logoColor=white)](https://nestjs.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-black?logo=typescript)](https://www.typescriptlang.org)
+
+![MockGen Screenshot](docs/screenshot.png)
+
+## Why MockGen
+
+Frontend geliştirirken backend henüz hazır olmadığında ya elle sahte JSON verisi yazılır ya da `json-server` gibi araçlarla geçici çözümler kurulur. MockGen, veri modelini (schema) bir kez tanımlayıp bunu istediğiniz kadar endpoint'e bağlamanıza, gerçekçi mock veriyi otomatik üretmenize ve gerçek zamanlı önizlemenize olanak tanır — hiç backend kodu yazmadan.
+
+MockGen is a modular platform for creating and managing mock API endpoints and data schemas. It allows developers to quickly generate dynamic RESTful APIs without writing any backend code, making it a practical tool for frontend development, testing, and prototyping.
+
+## Features
 
 - **Decoupled Architecture**: Separation of concerns between Data Models (`Schemas`) and API Routes (`Endpoints`). Create a model once, use it across multiple endpoints.
 - **Dynamic Mock Generation**: Powerful mock data generation engine powered by `faker.js`. Supports recursive arrays, nested objects, and a wide variety of primitive types (UUID, Email, Full Name, Date, etc.).
 - **Live Preview Engine**: See your generated mock data in real-time as you build your schemas.
-- **Strict Typing & Clean Code**: Built with a strict adherence to SOLID principles and Clean Code guidelines. 
-- **Dark Mode Native**: A beautifully crafted, premium UI with a native dark mode experience (crimson red accents and glassmorphism elements).
+- **Strict Typing & Clean Code**: Built with a strict adherence to SOLID principles and Clean Code guidelines.
+- **Dark Mode Native**: A crafted, native dark mode UI with crimson red accents and glassmorphism elements.
 - **JWT Authentication**: Secure user management and isolated workspaces for different users.
 - **Log & Analytics Tracking**: Monitor requests hitting your generated mock endpoints in real-time.
 
-##  Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Framework**: Next.js 16 (App Router) + Turbopack
@@ -25,10 +40,10 @@ MockGen is an enterprise-grade, highly modular SaaS platform designed for creati
 ### Backend
 - **Framework**: NestJS
 - **Language**: TypeScript (Strict mode, no `any`, zero-comment policy)
-- **Database**: PostgreSQL (Raw SQL queries via `pg` module - No ORM used for maximum performance and explicit control).
+- **Database**: PostgreSQL (Raw SQL queries via `pg` module — No ORM used for maximum performance and explicit control).
 - **Authentication**: Passport-JWT
 
-##  Architecture Highlights
+## Architecture Highlights
 
 ### The "Decoupled Flow"
 MockGen uses a modular decoupled flow approach:
@@ -38,7 +53,7 @@ MockGen uses a modular decoupled flow approach:
 ### Raw SQL Strategy
 The backend intentionally avoids ORMs (like Prisma or TypeORM) to enforce strict control over query execution and schema management. All database operations are handled via a custom `DatabaseStorageService` implementing standard `IStorage` contracts.
 
-##  Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (v18+)
@@ -75,7 +90,7 @@ The backend intentionally avoids ORMs (like Prisma or TypeORM) to enforce strict
    ```bash
    # Server
    cp server/.env.example server/.env
-   
+
    # Client
    cp client/.env.example client/.env
    ```
@@ -89,14 +104,17 @@ The backend intentionally avoids ORMs (like Prisma or TypeORM) to enforce strict
    npm run dev
    ```
 
-##  Project Guidelines
+## Project Guidelines
 
 - **No `any` Types**: TypeScript strict mode is enforced. Unknown types must be handled with type guards.
 - **State Management**: Redux is strictly forbidden. All asynchronous state and cache management is handled by TanStack Query.
-- **Clean Architecture (SOLID)**: 
-  - Monolithic API classes are prohibited. 
-  - Each feature domain (Schema, Endpoint, Log) must reside in its own API file (e.g., `schemaApi.ts`). 
+- **Clean Architecture (SOLID)**:
+  - Monolithic API classes are prohibited.
+  - Each feature domain (Schema, Endpoint, Log) must reside in its own API file (e.g., `schemaApi.ts`).
   - Types and API calls are separated into `domain/` and `api/` directories.
   - Endpoints strictly return pure domain responses without modifying UI state.
 - **Design Language**: The UI uses a strict dark theme with crimson accents (`bg-black`, `border-white/10`, `text-[#810100]`). Light mode elements are not permitted.
 
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
