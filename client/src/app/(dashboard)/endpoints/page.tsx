@@ -28,7 +28,7 @@ export default function EndpointsPage() {
   };
 
   return (
-    <div className="space-y-16 w-full">
+    <section className="space-y-16 w-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0 border-b border-black/10 dark:border-white/10 pb-8">
         <div>
           <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">Endpoints</h1>
@@ -39,7 +39,7 @@ export default function EndpointsPage() {
         </PanelButton>
       </div>
 
-      <div className="pt-4">
+      <section className="pt-4">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20 text-black/50 dark:text-white/50">
             <Spinner size="lg" className="mb-4" />
@@ -113,7 +113,7 @@ export default function EndpointsPage() {
             </table>
           </div>
         )}
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }
