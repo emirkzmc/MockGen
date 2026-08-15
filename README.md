@@ -9,7 +9,7 @@
 [![NestJS](https://img.shields.io/badge/NestJS-black?logo=nestjs&logoColor=white)](https://nestjs.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-black?logo=typescript)](https://www.typescriptlang.org)
 
-![MockGen Screenshot](public/screenshot.png)
+![MockGen Screenshot](client/public/screenshot.png)
 
 ## Why MockGen
 
