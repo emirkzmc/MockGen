@@ -43,13 +43,13 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="space-y-16 w-full">
-      <div className="border-b border-black/10 dark:border-white/10 pb-8">
+    <section className="space-y-16 w-full">
+      <header className="border-b border-black/10 dark:border-white/10 pb-8">
         <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">Settings</h1>
         <p className="text-sm text-black/60 dark:text-white/40 mt-2 font-light">Manage your account and API configuration.</p>
-      </div>
+      </header>
 
-      <div className="space-y-12">
+      <section className="space-y-12">
         <div>
           <h2 className="text-xs text-black/40 dark:text-white/30 uppercase tracking-widest border-b border-black/10 dark:border-white/5 pb-4 mb-8">Appearance</h2>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
@@ -134,7 +134,7 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }
