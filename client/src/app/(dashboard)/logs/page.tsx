@@ -32,13 +32,13 @@ export default function LogsPage() {
   };
 
   return (
-    <div className="space-y-16 w-full">
-      <div className="border-b border-black/10 dark:border-white/10 pb-8">
+    <section className="space-y-16 w-full">
+      <header className="border-b border-black/10 dark:border-white/10 pb-8">
         <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">Logs & Analytics</h1>
         <p className="text-sm text-black/60 dark:text-white/40 mt-2 font-light">View detailed incoming request payloads.</p>
-      </div>
+      </header>
 
-      <div className="pt-4">
+      <section className="pt-4">
         {(!logs || logs.length === 0) ? (
           <div className="flex flex-col items-center justify-center py-32 text-center">
             <h3 className="text-xl font-light text-black/50 dark:text-white/50 mb-2 tracking-wide">No logs yet</h3>
@@ -87,7 +87,7 @@ export default function LogsPage() {
             ))}
           </div>
         )}
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }
