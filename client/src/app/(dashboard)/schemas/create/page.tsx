@@ -16,90 +16,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@/hooks/useDebounce";
 import axios from "axios";
 import { SchemaField } from "@/domain/schemaDomains";
+import { FieldRow } from "@/components/schemas/FieldRow";
 
-function FieldRow({ field, updateField, removeField, addSubField, depth = 0 }: { field: SchemaField, updateField: (id: string, key: keyof SchemaField, value: string | SchemaField[]) => void, removeField: (id: string) => void, addSubField: (parentId: string) => void, depth?: number }) {
-  return (
-    <div className="flex flex-col space-y-3 relative">
-      {depth > 0 && (
-        <>
-          <div className="absolute -left-5 -top-3 bottom-5 w-px bg-black/10 dark:bg-white/10" />
-          <div className="absolute -left-5 bottom-5 w-4 h-px bg-black/10 dark:bg-white/10" />
-        </>
-      )}
-      <div className="flex flex-col sm:flex-row items-start sm:items-end space-y-4 sm:space-y-0 sm:space-x-6 group w-full">
-        <div className="flex-1 w-full">
-          {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Field Name</label>}
-          <PanelInput
-            type="text"
-            value={field.name}
-            onChange={(e) => updateField(field.id, "name", e.target.value)}
-            placeholder="field_name"
-            className="px-2 py-2 text-sm font-mono border-black/20 dark:border-white/10"
-          />
-        </div>
-        <div className="flex-1 w-full">
-          {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Type</label>}
-          <PanelSelect
-            value={field.type}
-            onChange={(e) => updateField(field.id, "type", e.target.value as SchemaField["type"])}
-            options={[
-              { label: "ID (Sequential)", value: "id" },
-              { label: "String", value: "string" },
-              { label: "Number", value: "number" },
-              { label: "Boolean", value: "boolean" },
-              { label: "UUID", value: "uuid" },
-              { label: "Date", value: "date" },
-              { label: "Object", value: "object" },
-              { label: "Array", value: "array" },
-              { label: "Email", value: "email" },
-              { label: "Full Name", value: "name" },
-              { label: "First Name", value: "firstName" },
-              { label: "Last Name", value: "lastName" },
-              { label: "Age", value: "age" },
-              { label: "Is Active", value: "isActive" },
-              { label: "City", value: "city" },
-              { label: "Phone", value: "phone" },
-            ]}
-            className="px-2 py-2 text-sm border-black/20 dark:border-white/10 w-full"
-          />
-        </div>
-        <PanelIconButton
-          icon={<Trash2 className="w-4 h-4" />}
-          onClick={() => removeField(field.id)}
-          variant="danger"
-          className={depth === 0 ? "pb-3" : ""}
-          title="Delete"
-        />
-      </div>
-
-      {field.type === 'array' && (
-        <div className="flex flex-col space-y-4 pl-8 pt-2">
-          {field.subFields?.map((subField) => (
-            <FieldRow
-              key={subField.id}
-              field={subField}
-              updateField={updateField}
-              removeField={removeField}
-              addSubField={addSubField}
-              depth={depth + 1}
-            />
-          ))}
-          <div className="relative">
-            <div className="absolute -left-5 -top-4 bottom-4 w-px bg-black/10 dark:bg-white/10" />
-            <div className="absolute -left-5 bottom-4 w-4 h-px bg-black/10 dark:bg-white/10" />
-            <button
-              onClick={() => addSubField(field.id)}
-              className="cursor-pointer text-xs text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white uppercase tracking-widest flex items-center space-x-1 transition-colors mt-2"
-            >
-              <Plus className="w-3 h-3" />
-              <span>Add Item Field</span>
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 function SchemaEditorContent() {
   const router = useRouter();
@@ -264,7 +182,7 @@ function SchemaEditorContent() {
   }
 
   return (
-    <div className="space-y-12 w-full">
+    <section className="space-y-12 w-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0 border-b border-black/10 dark:border-white/10 pb-8">
         <div className="flex items-center space-x-6">
           <Link href="/schemas" className="text-black/60 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors">
@@ -344,7 +262,7 @@ function SchemaEditorContent() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -14,7 +14,7 @@ export default function DashboardPage() {
   const recentLogs = logs ? logs.slice(0, 5) : [];
 
   return (
-    <div className="space-y-16 w-full">
+    <section className="space-y-16 w-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0 border-b border-black/10 dark:border-white/10 pb-8">
         <div>
           <h1 className="text-3xl font-light text-black dark:text-white tracking-wide">Overview</h1>
@@ -40,7 +40,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="pt-8">
+      <section className="pt-8">
         <h2 className="text-xs text-black/40 dark:text-white/30 uppercase tracking-widest mb-8">Recent Requests</h2>
         <div className="overflow-x-auto">
           {isLoadingLogs ? (
@@ -75,7 +75,7 @@ export default function DashboardPage() {
             </table>
           )}
         </div>
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }
