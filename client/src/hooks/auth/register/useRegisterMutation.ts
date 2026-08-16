@@ -6,13 +6,14 @@ export function useRegisterMutation(onSuccessCallback?: () => void) {
   return useMutation({
     mutationFn: registerUser,
     onSuccess: () => {
-      toast.success('Kayıt başarılı! Lütfen giriş yapın.');
+      toast.success('Registration successful! Please sign in.');
       if (onSuccessCallback) {
         onSuccessCallback();
       }
     },
-    onError: () => {
-      toast.error('Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.');
+    onError: (error: Error) => {
+      toast.error('Registration failed. Please check your details.');
+      console.error('Registration error:', error);
     },
   });
 }

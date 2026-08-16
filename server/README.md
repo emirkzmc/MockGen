@@ -1,84 +1,84 @@
 # MockGen - Server (Backend)
 
-Bu proje MockGen uygulamasının backend (sunucu) tarafını oluşturur. Güçlü ve ölçeklenebilir bir mimari için NestJS kullanılarak geliştirilmiştir.
+This project constitutes the backend (server) side of the MockGen application. It is developed using NestJS for a robust and scalable architecture.
 
-##  Teknoloji Yığını (Tech Stack)
+## Tech Stack
 
 - **Framework:** [NestJS 11](https://nestjs.com/)
-- **Dil:** TypeScript
-- **Veritabanı Sürücüsü:** PostgreSQL (`pg`)
-- **Kimlik Doğrulama:** JWT (`@nestjs/jwt`) & bcrypt
-- **Sahte Veri (Mocking):** [@faker-js/faker](https://fakerjs.dev/)
+- **Language:** TypeScript
+- **Database Driver:** PostgreSQL (`pg`)
+- **Authentication:** JWT (`@nestjs/jwt`) & bcrypt
+- **Mocking:** [@faker-js/faker](https://fakerjs.dev/)
 
-##  Başlangıç
+## Getting Started
 
-Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyin.
+Follow the steps below to run the project in your local environment.
 
-### Ön Koşullar
+### Prerequisites
 
-- Node.js (v20 veya üzeri önerilir)
-- PostgreSQL Veritabanı
-- Docker (İsteğe bağlı, ancak veritabanı kurulumu için önerilir)
+- Node.js (v20 or higher recommended)
+- PostgreSQL Database
+- Docker (Optional, but recommended for database setup)
 
-### Kurulum
+### Installation
 
-1. Bağımlılıkları yükleyin:
+1. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Ortam değişkenlerini ayarlayın:
-`.env.example` dosyasını kopyalayarak `.env` dosyası oluşturun ve veritabanı bilgileri gibi gerekli değişkenleri doldurun.
+2. Set up environment variables:
+Copy the `.env.example` file to create a `.env` file and fill in the necessary variables such as database credentials.
 
 ```bash
 cp .env.example .env
 ```
 
-### Veritabanı (PostgreSQL)
+### Database (PostgreSQL)
 
-Eğer Docker yüklüyse projedeki `docker-compose.yml` (ana dizindeki) ile veya kendi yerel PostgreSQL sunucunuz ile veritabanını ayağa kaldırabilirsiniz.
-Gerekli tablo yapıları veya başlangıç verileri için `init.sql` dosyasını inceleyebilirsiniz.
+If Docker is installed, you can spin up the database using the `docker-compose.yml` (in the root directory) or use your own local PostgreSQL server.
+You can review the `init.sql` file for the required table structures or initial data.
 
-### Uygulamayı Çalıştırma
+### Running the Application
 
 ```bash
-# Geliştirme modu (watch modu aktif)
+# Development mode (watch mode enabled)
 npm run start:dev
 
-# Standart çalıştırma
+# Standard execution
 npm run start
 
-# Production modu (önce build alınmalıdır)
+# Production mode (must be built first)
 npm run build
 npm run start:prod
 ```
 
-##  Proje Yapısı
+## Project Structure
 
-NestJS'in modüler yapısı benimsenmiştir. Her özellik kendi modülü içinde (Controller, Service, Entity/DTO) gruplandırılmıştır.
+The modular structure of NestJS is adopted. Each feature is grouped within its own module (Controller, Service, Entity/DTO).
 
-- `src/`: Kaynak kodların bulunduğu ana dizin.
-  - Genellikle özellikler (features) modüller halinde klasörlenir (örn: `auth`, `users` vb.)
-- `init.sql`: Veritabanı şeması veya başlangıç mock verilerini oluşturmak için kullanılan SQL betiği.
+- `src/`: The main directory containing the source code.
+  - Features are generally organized into module folders (e.g., `auth`, `users`, etc.)
+- `init.sql`: The SQL script used to create the database schema or initial mock data.
 
-##  Testler
+## Tests
 
-Projeyi test etmek için aşağıdaki komutları kullanabilirsiniz:
+You can use the following commands to test the project:
 
 ```bash
-# Birim (Unit) testleri
+# Unit tests
 npm run test
 
-# Uçtan uca (e2e) testler
+# End-to-end (e2e) tests
 npm run test:e2e
 
-# Test kapsam (coverage) raporu
+# Test coverage report
 npm run test:cov
 ```
 
-##  Kod Standartları
+## Code Standards
 
-Bu proje genel mimari kuralları (`AGENTS.md`) çerçevesinde geliştirilmektedir. NestJS'in en iyi pratiklerini takip edin:
-- Dependency Injection kullanın.
-- Controller'lar olabildiğince ince tutulmalı, iş mantığı Service katmanında yer almalıdır.
-- Çevresel değişkenler için ConfigModule kullanmaya özen gösterin.
+This project is developed under the general architecture rules (`AGENTS.md`). Follow NestJS best practices:
+- Use Dependency Injection.
+- Controllers should be kept as thin as possible; business logic should reside in the Service layer.
+- Ensure you use ConfigModule for environment variables.

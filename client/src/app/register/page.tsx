@@ -57,7 +57,7 @@ export default function RegisterPage() {
             ))}
             
             <Button type="submit" isLoading={registerMutation.isPending}>
-              Kayıt Ol
+              Sign Up
             </Button>
             
             <p className="text-center mt-2 text-sm text-gray-300">

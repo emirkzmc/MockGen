@@ -96,7 +96,7 @@ export default function LoginPage() {
             
             <div className="mt-2">
               <Button type="submit" isLoading={loginMutation.isPending}>
-                Giriş Yap
+                Sign In
               </Button>
             </div>
 
