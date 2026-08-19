@@ -41,7 +41,12 @@ function SchemaEditorContent() {
       setName(existingSchema.name);
       
       const parseSchemaFields = (schemaObj: Record<string, unknown>): SchemaField[] => {
-        return Object.entries(schemaObj).map(([fieldName, typeDef], index) => {
+        const keys = Array.isArray(schemaObj._meta_order)
+          ? (schemaObj._meta_order as string[])
+          : Object.keys(schemaObj).filter(k => k !== '_meta_order');
+        
+        return keys.map((fieldName, index) => {
+          const typeDef = schemaObj[fieldName];
           if (typeof typeDef === 'object' && typeDef !== null && (typeDef as Record<string, unknown>).type === 'array') {
             return {
               id: Date.now().toString() + index,
@@ -149,8 +154,10 @@ function SchemaEditorContent() {
 
     const buildSchema = (fieldsList: SchemaField[]): Record<string, unknown> => {
       const sch: Record<string, unknown> = {};
+      const order: string[] = [];
       fieldsList.forEach((f) => {
         if (f.name.trim()) {
+          order.push(f.name.trim());
           if (f.type === 'array') {
             sch[f.name.trim()] = { type: 'array', itemType: buildSchema(f.subFields || []) };
           } else {
@@ -158,6 +165,9 @@ function SchemaEditorContent() {
           }
         }
       });
+      if (order.length > 0) {
+        sch._meta_order = order;
+      }
       return sch;
     };
     

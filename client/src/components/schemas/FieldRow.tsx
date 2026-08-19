@@ -25,13 +25,14 @@ export function FieldRow({ field, updateField, removeField, addSubField, reorder
       )}
       <div className="flex flex-col sm:flex-row items-start sm:items-end space-y-4 sm:space-y-0 sm:space-x-6 group w-full">
         <div
-          className="cursor-grab active:cursor-grabbing flex items-center justify-center pt-3 opacity-0 group-hover:opacity-100 transition-opacity text-black/40 dark:text-white/30 hover:text-black dark:hover:text-white pb-3 sm:pb-0"
+          className="cursor-grab active:cursor-grabbing flex items-center justify-center pt-3 opacity-40 group-hover:opacity-100 transition-opacity text-black/40 dark:text-white/30 hover:text-black dark:hover:text-white pb-3 sm:pb-0"
           onPointerDown={(e) => dragControls?.start(e)}
+          style={{ touchAction: "none" }}
         >
           <GripVertical className="w-5 h-5" />
         </div>
         <div className="flex-1 w-full">
-          {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Field Name</label>}
+          {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-40 group-hover:opacity-100 transition-opacity">Field Name</label>}
           <PanelInput
             type="text"
             value={field.name}
@@ -41,7 +42,7 @@ export function FieldRow({ field, updateField, removeField, addSubField, reorder
           />
         </div>
         <div className="flex-1 w-full">
-          {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Type</label>}
+          {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-40 group-hover:opacity-100 transition-opacity">Type</label>}
           <PanelSelect
             value={field.type}
             onChange={(e) => updateField(field.id, "type", e.target.value as SchemaField["type"])}
