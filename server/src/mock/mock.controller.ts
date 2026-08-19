@@ -139,8 +139,13 @@ export class MockController {
     index?: number,
   ): Record<string, unknown> {
     const result: Record<string, unknown> = {};
+    const keys = Array.isArray(schema._meta_order)
+      ? (schema._meta_order as string[])
+      : Object.keys(schema).filter((k) => k !== '_meta_order');
 
-    for (const [key, value] of Object.entries(schema)) {
+    for (const key of keys) {
+      if (key === '_meta_order') continue;
+      const value = schema[key];
       if (
         typeof value === 'object' &&
         value !== null &&
