@@ -16,7 +16,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@/hooks/useDebounce";
 import axios from "axios";
 import { SchemaField } from "@/domain/schemaDomains";
-import { FieldRow } from "@/components/schemas/FieldRow";
+import { FieldRow, DraggableFieldRow } from "@/components/schemas/FieldRow";
+import { Reorder } from "framer-motion";
 
 
 function SchemaEditorContent() {
@@ -109,6 +110,21 @@ function SchemaEditorContent() {
       });
     };
     setFields(removeRecursive(fields));
+  };
+
+  const reorderSubField = (parentId: string, newSubFields: SchemaField[]) => {
+    const reorderRecursive = (fieldsList: SchemaField[]): SchemaField[] => {
+      return fieldsList.map(f => {
+        if (f.id === parentId) {
+          return { ...f, subFields: newSubFields };
+        }
+        if (f.subFields) {
+          return { ...f, subFields: reorderRecursive(f.subFields) };
+        }
+        return f;
+      });
+    };
+    setFields(reorderRecursive(fields));
   };
 
   const debouncedFields = useDebounce(fields, 500);
@@ -231,11 +247,11 @@ function SchemaEditorContent() {
               </button>
             </div>
             
-            <div className="space-y-4">
+            <Reorder.Group axis="y" values={fields} onReorder={setFields} className="space-y-4">
               {fields.map((field) => (
-                <FieldRow key={field.id} field={field} updateField={updateField} removeField={removeField} addSubField={addSubField} />
+                <DraggableFieldRow key={field.id} field={field} updateField={updateField} removeField={removeField} addSubField={addSubField} reorderSubField={reorderSubField} />
               ))}
-            </div>
+            </Reorder.Group>
           </div>
         </div>
 

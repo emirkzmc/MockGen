@@ -2,9 +2,19 @@ import { SchemaField } from "@/domain/schemaDomains";
 import { PanelInput } from "@/components/ui/PanelInput";
 import { PanelSelect } from "@/components/ui/PanelSelect";
 import { PanelIconButton } from "@/components/ui/PanelIconButton";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, GripVertical } from "lucide-react";
+import { Reorder, useDragControls } from "framer-motion";
 
-export function FieldRow({ field, updateField, removeField, addSubField, depth = 0 }: { field: SchemaField, updateField: (id: string, key: keyof SchemaField, value: string | SchemaField[]) => void, removeField: (id: string) => void, addSubField: (parentId: string) => void, depth?: number }) {
+export function DraggableFieldRow(props: { field: SchemaField, updateField: (id: string, key: keyof SchemaField, value: string | SchemaField[]) => void, removeField: (id: string) => void, addSubField: (parentId: string) => void, reorderSubField: (parentId: string, newSubFields: SchemaField[]) => void, depth?: number }) {
+  const dragControls = useDragControls();
+  return (
+    <Reorder.Item value={props.field} dragListener={false} dragControls={dragControls} className="relative group">
+      <FieldRow {...props} dragControls={dragControls} />
+    </Reorder.Item>
+  );
+}
+
+export function FieldRow({ field, updateField, removeField, addSubField, reorderSubField, depth = 0, dragControls }: { field: SchemaField, updateField: (id: string, key: keyof SchemaField, value: string | SchemaField[]) => void, removeField: (id: string) => void, addSubField: (parentId: string) => void, reorderSubField: (parentId: string, newSubFields: SchemaField[]) => void, depth?: number, dragControls?: any }) {
   return (
     <div className="flex flex-col space-y-3 relative">
       {depth > 0 && (
@@ -14,6 +24,12 @@ export function FieldRow({ field, updateField, removeField, addSubField, depth =
         </>
       )}
       <div className="flex flex-col sm:flex-row items-start sm:items-end space-y-4 sm:space-y-0 sm:space-x-6 group w-full">
+        <div
+          className="cursor-grab active:cursor-grabbing flex items-center justify-center pt-3 opacity-0 group-hover:opacity-100 transition-opacity text-black/40 dark:text-white/30 hover:text-black dark:hover:text-white pb-3 sm:pb-0"
+          onPointerDown={(e) => dragControls?.start(e)}
+        >
+          <GripVertical className="w-5 h-5" />
+        </div>
         <div className="flex-1 w-full">
           {depth === 0 && <label className="block text-[10px] text-black/40 dark:text-white/30 uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity">Field Name</label>}
           <PanelInput
@@ -61,16 +77,19 @@ export function FieldRow({ field, updateField, removeField, addSubField, depth =
 
       {field.type === 'array' && (
         <div className="flex flex-col space-y-4 pl-8 pt-2">
-          {field.subFields?.map((subField) => (
-            <FieldRow
-              key={subField.id}
-              field={subField}
-              updateField={updateField}
-              removeField={removeField}
-              addSubField={addSubField}
-              depth={depth + 1}
-            />
-          ))}
+          <Reorder.Group axis="y" values={field.subFields || []} onReorder={(newOrder) => reorderSubField(field.id, newOrder)} className="space-y-4">
+            {field.subFields?.map((subField) => (
+              <DraggableFieldRow
+                key={subField.id}
+                field={subField}
+                updateField={updateField}
+                removeField={removeField}
+                addSubField={addSubField}
+                reorderSubField={reorderSubField}
+                depth={depth + 1}
+              />
+            ))}
+          </Reorder.Group>
           <div className="relative">
             <div className="absolute -left-5 -top-4 bottom-4 w-px bg-black/10 dark:bg-white/10" />
             <div className="absolute -left-5 bottom-4 w-4 h-px bg-black/10 dark:bg-white/10" />
