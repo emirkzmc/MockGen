@@ -3,7 +3,7 @@ import { PanelInput } from "@/components/ui/PanelInput";
 import { PanelSelect } from "@/components/ui/PanelSelect";
 import { PanelIconButton } from "@/components/ui/PanelIconButton";
 import { Trash2, Plus, GripVertical } from "lucide-react";
-import { Reorder, useDragControls } from "framer-motion";
+import { Reorder, useDragControls, DragControls } from "framer-motion";
 
 export function DraggableFieldRow(props: { field: SchemaField, updateField: (id: string, key: keyof SchemaField, value: string | SchemaField[]) => void, removeField: (id: string) => void, addSubField: (parentId: string) => void, reorderSubField: (parentId: string, newSubFields: SchemaField[]) => void, depth?: number }) {
   const dragControls = useDragControls();
@@ -14,7 +14,7 @@ export function DraggableFieldRow(props: { field: SchemaField, updateField: (id:
   );
 }
 
-export function FieldRow({ field, updateField, removeField, addSubField, reorderSubField, depth = 0, dragControls }: { field: SchemaField, updateField: (id: string, key: keyof SchemaField, value: string | SchemaField[]) => void, removeField: (id: string) => void, addSubField: (parentId: string) => void, reorderSubField: (parentId: string, newSubFields: SchemaField[]) => void, depth?: number, dragControls?: any }) {
+export function FieldRow({ field, updateField, removeField, addSubField, reorderSubField, depth = 0, dragControls }: { field: SchemaField, updateField: (id: string, key: keyof SchemaField, value: string | SchemaField[]) => void, removeField: (id: string) => void, addSubField: (parentId: string) => void, reorderSubField: (parentId: string, newSubFields: SchemaField[]) => void, depth?: number, dragControls?: DragControls }) {
   return (
     <div className="flex flex-col space-y-3 relative">
       {depth > 0 && (
