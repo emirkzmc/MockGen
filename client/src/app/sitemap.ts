@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://mockgen.com";
+  const baseUrl = "https://mockgen.com.tr";
   
   return [
     {
