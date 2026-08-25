@@ -10,8 +10,48 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "MockGen",
-  description: "Dynamic Mock API Generator",
+  metadataBase: new URL("https://mockgen.com.tr"),
+  title: {
+    default: "MockGen | Free Dynamic Mock API & JSON Generator",
+    template: "%s | MockGen",
+  },
+  description: "Build dynamic mock API endpoints in seconds. Define your data models and get realistic mock REST APIs without writing any backend code. A better alternative to json-server.",
+  keywords: [
+    "mock api", 
+    "fake json", 
+    "rest api generator", 
+    "mock server", 
+    "json server alternative", 
+    "frontend mocking", 
+    "mockgen", 
+    "api prototyping"
+  ],
+  authors: [{ name: "MockGen" }],
+  creator: "MockGen",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://mockgen.com.tr",
+    title: "MockGen | Free Dynamic Mock API Generator",
+    description: "Build dynamic mock API endpoints in seconds. Define your data models and get realistic mock REST APIs without writing any backend code.",
+    siteName: "MockGen",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MockGen | Free Dynamic Mock API Generator",
+    description: "Build dynamic mock API endpoints in seconds without any backend code.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
