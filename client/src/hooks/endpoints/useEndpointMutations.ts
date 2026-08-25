@@ -23,10 +23,10 @@ export function useCreateEndpointMutation() {
     mutationFn: createEndpoint,
     onSuccess: async () => {
       await invalidateEndpoints();
-      toast.success('Endpoint başarıyla oluşturuldu');
+      toast.success('Endpoint created successfully');
     },
     onError: () => {
-      toast.error('Endpoint oluşturulurken bir hata oluştu');
+      toast.error('An error occurred while creating the endpoint');
     },
   });
 }
@@ -39,10 +39,10 @@ export function useUpdateEndpointMutation() {
       updateEndpoint(id, payload),
     onSuccess: async (_, variables) => {
       await invalidateEndpoints(variables.id);
-      toast.success('Endpoint başarıyla güncellendi');
+      toast.success('Endpoint updated successfully');
     },
     onError: () => {
-      toast.error('Endpoint güncellenirken bir hata oluştu');
+      toast.error('An error occurred while updating the endpoint');
     },
   });
 }
@@ -54,10 +54,10 @@ export function useDeleteEndpointMutation() {
     mutationFn: deleteEndpoint,
     onSuccess: async (_, id) => {
       await invalidateEndpoints(id);
-      toast.success('Endpoint başarıyla silindi');
+      toast.success('Endpoint deleted successfully');
     },
     onError: () => {
-      toast.error('Endpoint silinirken bir hata oluştu');
+      toast.error('An error occurred while deleting the endpoint');
     },
   });
 }

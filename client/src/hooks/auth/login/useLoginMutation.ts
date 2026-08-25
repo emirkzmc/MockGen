@@ -11,7 +11,7 @@ export function useLoginMutation(
     onSuccess: (data) => {
       localStorage.setItem('authToken', data.access_token);
       document.cookie = `authToken=${data.access_token}; path=/; max-age=86400; samesite=strict`;
-      toast.success('Giriş başarılı!');
+      toast.success('Login successful!');
       if (onSuccessCallback) {
         onSuccessCallback();
       }
@@ -20,7 +20,7 @@ export function useLoginMutation(
       if (onErrorCallback) {
         onErrorCallback(error);
       } else {
-        toast.error('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
+        toast.error('Login failed. Please check your credentials.');
       }
     },
   });
