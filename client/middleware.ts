@@ -5,7 +5,7 @@ export function middleware(request: NextRequest): NextResponse {
   const token = request.cookies.get('authToken')?.value;
   const { pathname } = request.nextUrl;
 
-  const publicRoutes = ['/login', '/register'];
+  const publicRoutes = ['/', '/login', '/register'];
   const isPublicRoute = publicRoutes.includes(pathname);
 
   if (!token && !isPublicRoute) {
