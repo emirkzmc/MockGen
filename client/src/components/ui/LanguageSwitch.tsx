@@ -16,7 +16,7 @@ export function LanguageSwitch({ value, onChange }: LanguageSwitchProps) {
   const direction = isEn ? 1 : -1;
 
   const springTransition = {
-    type: "spring",
+    type: "spring" as const,
     stiffness: 500,
     damping: 35,
   };
