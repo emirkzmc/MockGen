@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 
 const FONTS = [
   'var(--font-poppins)', 
@@ -55,7 +54,7 @@ export function AnimatedLabel() {
   }, [phase]);
 
   return (
-    <a href="/" className="relative flex items-center group cursor-pointer pointer-events-auto">
+    <div className="relative flex items-center">
       <AnimatePresence>
         {phase === 'flicker' && (
           <motion.div
@@ -73,7 +72,7 @@ export function AnimatedLabel() {
         {phase === 'final' && (
           <motion.div
             key="final"
-            className="text-8xl font-bold leading-none will-change-transform absolute right-0 origin-right whitespace-nowrap group-hover:text-white/60 transition-colors duration-300"
+            className="text-8xl font-bold leading-none will-change-transform absolute right-0 origin-right whitespace-nowrap"
             style={{ fontFamily: 'var(--font-poppins)' }}
             initial={{ opacity: 0, filter: "blur(10px)", scale: 0.95 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
@@ -89,6 +88,6 @@ export function AnimatedLabel() {
       >
         MOCKGEN
       </div>
-    </a>
+    </div>
   );
 }
