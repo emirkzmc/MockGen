@@ -8,6 +8,7 @@ import Image from "next/image";
 import { StormCanvas } from "@/components/ui/StormCanvas";
 import { LanguageSwitch } from "@/components/ui/LanguageSwitch";
 import { ArrowRight, Code, ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 const DICTIONARY = {
   en: {
@@ -117,20 +118,40 @@ export default function HomePage() {
         </header>
 
         <main className="min-h-screen flex flex-col items-center justify-center pt-20 px-6 text-center pointer-events-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-sm text-white/80 mb-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-sm text-white/80 mb-8"
+          >
             <span className="w-2 h-2 rounded-full bg-[#810100] animate-pulse"></span>
             {t.mockEndpoints}
-          </div>
+          </motion.div>
           
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight max-w-4xl leading-[1.1]">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-5xl md:text-7xl font-bold tracking-tight max-w-4xl leading-[1.1]"
+          >
             {t.buildDynamic} <span className="text-[#810100]">{t.mockApis}</span> {t.withoutBackend}
-          </h1>
+          </motion.h1>
           
-          <p className="mt-6 text-lg md:text-xl text-white/80 max-w-2xl leading-relaxed">
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-6 text-lg md:text-xl text-white/80 max-w-2xl leading-relaxed"
+          >
             {t.heroDesc}
-          </p>
+          </motion.p>
 
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center"
+          >
             <Link 
               href="/register" 
               className="flex items-center gap-2 px-8 py-4 bg-[#810100] hover:bg-[#a30100] text-white rounded-lg font-medium transition-all shadow-[0_0_20px_rgba(129,1,0,0.3)] hover:shadow-[0_0_30px_rgba(129,1,0,0.5)]"
@@ -146,7 +167,7 @@ export default function HomePage() {
               <Code size={18} />
               {t.viewOnGithub}
             </Link>
-          </div>
+          </motion.div>
           
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce pointer-events-none">
             <span className="text-xs uppercase tracking-widest text-white/70">{t.scrollToDive}</span>
@@ -154,9 +175,20 @@ export default function HomePage() {
           </div>
         </main>
         
-        <div className="min-h-screen flex items-center max-w-7xl mx-auto px-6 py-24">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-            <div className="p-8 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-xl pointer-events-auto shadow-2xl transition-all hover:-translate-y-2 hover:border-[#810100]/50 group">
+        <div className="min-h-screen flex items-center max-w-7xl mx-auto px-6 py-24 overflow-hidden">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full"
+          >
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="p-8 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-xl pointer-events-auto shadow-2xl transition-all hover:-translate-y-2 hover:border-[#810100]/50 group"
+            >
               <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors">
                 <Image src="/icons/database.svg" alt="Database Icon" width={28} height={28} />
               </div>
@@ -164,9 +196,15 @@ export default function HomePage() {
               <p className="text-white/60 leading-relaxed">
                 {t.decoupledDesc}
               </p>
-            </div>
+            </motion.div>
             
-            <div className="p-8 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-xl pointer-events-auto shadow-2xl transition-all hover:-translate-y-2 hover:border-[#810100]/50 group">
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="p-8 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-xl pointer-events-auto shadow-2xl transition-all hover:-translate-y-2 hover:border-[#810100]/50 group"
+            >
               <div className="w-12 h-12 rounded-xl   flex items-center justify-center mb-6 transition-colors">
                 <Image src="/icons/layers.svg" alt="Layers Icon" width={28} height={28} />
               </div>
@@ -174,9 +212,15 @@ export default function HomePage() {
               <p className="text-white/60 leading-relaxed">
                 {t.dynamicDesc}
               </p>
-            </div>
+            </motion.div>
 
-            <div className="p-8 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-xl pointer-events-auto shadow-2xl transition-all hover:-translate-y-2 hover:border-[#810100]/50 group">
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="p-8 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-xl pointer-events-auto shadow-2xl transition-all hover:-translate-y-2 hover:border-[#810100]/50 group"
+            >
               <div className="w-12 h-12 rounded-xl  flex items-center justify-center mb-6 transition-colors">
                 <Image src="/icons/zap.svg" alt="Zap Icon" width={28} height={28} />
               </div>
@@ -184,8 +228,8 @@ export default function HomePage() {
               <p className="text-white/60 leading-relaxed">
                 {t.instantApiDesc}
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
 
         {/* Documentation / How it works Section */}
@@ -196,7 +240,13 @@ export default function HomePage() {
           
           <div className="relative max-w-7xl mx-auto px-6 z-10">
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-32">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6 }}
+              className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-32"
+            >
               <h2 className="text-6xl md:text-8xl font-bold tracking-tight leading-none">
                 {t.howItWorksPart1}<br />{t.howItWorksPart2}
               </h2>
@@ -208,11 +258,17 @@ export default function HomePage() {
                   {t.startForFree}
                 </Link>
               </div>
-            </div>
+            </motion.div>
 
             <div className="flex flex-col gap-24 md:gap-32">
               {/* Step 1 */}
-              <div className="flex flex-col md:flex-row items-center gap-12">
+              <motion.div 
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col md:flex-row items-center gap-12"
+              >
                 <div className="w-full md:w-1/3">
                   <div className="text-white/60 mb-2">{t.step1}</div>
                   <h3 className="text-4xl font-bold mb-4 flex items-center gap-2">
@@ -233,10 +289,16 @@ export default function HomePage() {
 }`}</code></pre>
                    </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Step 2 */}
-              <div className="flex flex-col md:flex-row-reverse items-center gap-12">
+              <motion.div 
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col md:flex-row-reverse items-center gap-12"
+              >
                 <div className="w-full md:w-1/3">
                   <div className="text-white/60 mb-2">{t.step2}</div>
                   <h3 className="text-4xl font-bold mb-4 flex items-center gap-2">
@@ -258,10 +320,16 @@ export default function HomePage() {
 }`}</code></pre>
                    </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Step 3 */}
-              <div className="flex flex-col md:flex-row items-center gap-12">
+              <motion.div 
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col md:flex-row items-center gap-12"
+              >
                 <div className="w-full md:w-1/3">
                   <div className="text-white/60 mb-2">{t.step3}</div>
                   <h3 className="text-4xl font-bold mb-4 flex items-center gap-2">
@@ -281,7 +349,7 @@ export default function HomePage() {
 // returns Array(50) [ { id: "...", name: "..." } ]`}</code></pre>
                    </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
