@@ -5,14 +5,17 @@ export function middleware(request: NextRequest): NextResponse {
   const token = request.cookies.get('authToken')?.value;
   const { pathname } = request.nextUrl;
 
-  const publicRoutes = ['/', '/login', '/register'];
+  const authRoutes = ['/login', '/register'];
+  const publicRoutes = ['/', '/terms', '/privacy', ...authRoutes];
+  
+  const isAuthRoute = authRoutes.includes(pathname);
   const isPublicRoute = publicRoutes.includes(pathname);
 
   if (!token && !isPublicRoute) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  if (token && isPublicRoute) {
+  if (token && isAuthRoute) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
