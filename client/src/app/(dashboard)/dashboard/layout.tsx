@@ -3,11 +3,11 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Dashboard | MockGen',
   description: 'Overview of your MockGen endpoints and recent requests.',
-  alternates: { canonical: 'https://mockgen.com/dashboard' },
+  alternates: { canonical: 'https://mockgen.com.tr/dashboard' },
   openGraph: {
     title: 'Dashboard | MockGen',
     description: 'Overview of your MockGen endpoints and recent requests.',
-    url: 'https://mockgen.com/dashboard',
+    url: 'https://mockgen.com.tr/dashboard',
     siteName: 'MockGen',
   },
   twitter: {

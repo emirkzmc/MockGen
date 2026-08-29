@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { faker } from '@faker-js/faker';
 import { SchemaField } from '@/domain/schemaDomains';
 
+export const runtime = 'edge';
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();

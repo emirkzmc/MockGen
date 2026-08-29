@@ -3,11 +3,11 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Login | MockGen',
   description: 'Login to your MockGen account to manage your mock APIs.',
-  alternates: { canonical: 'https://mockgen.com/login' },
+  alternates: { canonical: 'https://mockgen.com.tr/login' },
   openGraph: {
     title: 'Login | MockGen',
     description: 'Login to your MockGen account to manage your mock APIs.',
-    url: 'https://mockgen.com/login',
+    url: 'https://mockgen.com.tr/login',
     siteName: 'MockGen',
   },
   twitter: {
