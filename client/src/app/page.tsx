@@ -13,7 +13,6 @@ const DICTIONARY = {
   en: {
     signIn: "Sign In",
     getStarted: "Get Started",
-    mockEndpoints: "Mock endpoints in seconds",
     buildDynamic: "Build Dynamic",
     mockApis: "Mock APIs",
     withoutBackend: "Without Backend Code",
@@ -46,7 +45,6 @@ const DICTIONARY = {
   tr: {
     signIn: "Giriş Yap",
     getStarted: "Başlayın",
-    mockEndpoints: "Saniyeler içinde Mock API'ler",
     buildDynamic: "Backend Kodu Olmadan",
     mockApis: "Dinamik Mock API'ler",
     withoutBackend: "Oluşturun",
@@ -117,10 +115,6 @@ export default function HomePage() {
         </header>
 
         <main className="min-h-screen flex flex-col items-center justify-center pt-20 px-6 text-center pointer-events-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-sm text-white/80 mb-8">
-            <span className="w-2 h-2 rounded-full bg-[#810100] animate-pulse"></span>
-            {t.mockEndpoints}
-          </div>
           
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight max-w-4xl leading-[1.1]">
             {t.buildDynamic} <span className="text-[#810100]">{t.mockApis}</span> {t.withoutBackend}
